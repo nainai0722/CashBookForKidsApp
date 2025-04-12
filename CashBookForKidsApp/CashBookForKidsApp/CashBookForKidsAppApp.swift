@@ -6,31 +6,18 @@
 //
 
 import SwiftUI
-import SwiftData
+import RealmSwift
 
 @main
-struct CashBookForKidsAppApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Money.self,
-            UserInfo.self,
-            TodayData.self,
-            Routine.self,
-            RoutineTitle.self
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
-
+struct CashBookForKidsAppApp: SwiftUI.App {
     var body: some Scene {
         WindowGroup {
-            MainTabView()
+
+//            RealmControl()
+            MultiUserTabView()
+                .onAppear(){
+                    
+                }
         }
-        .modelContainer(sharedModelContainer)
     }
 }

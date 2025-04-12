@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		F8D23ACC2DA8D3B800C4A7FE /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F8D23ACB2DA8D3B800C4A7FE /* RealmSwift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		F81A6B072D9EC86800EA87AB /* CashBookForKidsApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CashBookForKidsApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F8D23ACC2DA8D3B800C4A7FE /* RealmSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +70,7 @@
 			);
 			name = CashBookForKidsApp;
 			packageProductDependencies = (
+				F8D23ACB2DA8D3B800C4A7FE /* RealmSwift */,
 			);
 			productName = CashBookForKidsApp;
 			productReference = F81A6B072D9EC86800EA87AB /* CashBookForKidsApp.app */;
@@ -95,6 +101,7 @@
 			mainGroup = F81A6AFE2D9EC86800EA87AB;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				F8D23ACA2DA8D3B800C4A7FE /* XCRemoteSwiftPackageReference "realm-swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F81A6B082D9EC86800EA87AB /* Products */;
@@ -328,6 +335,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		F8D23ACA2DA8D3B800C4A7FE /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.54.4;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F8D23ACB2DA8D3B800C4A7FE /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F8D23ACA2DA8D3B800C4A7FE /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = F81A6AFF2D9EC86800EA87AB /* Project object */;
 }

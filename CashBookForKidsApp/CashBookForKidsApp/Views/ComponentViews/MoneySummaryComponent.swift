@@ -6,13 +6,14 @@
 //
 
 import SwiftUI
-import SwiftData
+import RealmSwift
 
 struct MoneySummaryComponent: View {
     @Binding var isShowingGoalSetting: Bool
     @Binding var isShowingMoneyDetail: Bool
     @Binding var total: Int
-    @Binding var goal: Goal
+    @Binding var goal: GoalData
+    
     
     var isGoalAchieved: Bool {
         return goal.amount > total
@@ -81,6 +82,7 @@ struct MoneySummaryComponent: View {
         }
         .frame(height: 200)
         .padding(20)
+        .padding(.bottom, 0)
     }
     
     var currentDateString:String{
@@ -102,7 +104,7 @@ struct MoneySummaryComponent: View {
 struct MoneySummaryComponent_Test: View {
     @Binding var isShowingGoalSetting: Bool
     @Binding var total: Int
-    @Binding var goal: Goal
+    @Binding var goal: GoalData
     
     var isGoalAchieved: Bool {
         return goal.amount > total
@@ -136,8 +138,8 @@ struct MoneySummaryComponent_Test: View {
     MoneySummaryComponent(
         isShowingGoalSetting: .constant(true),
         isShowingMoneyDetail: .constant(true),
-        total: .constant(1000),goal: .constant(Goal.mockGoal))
+        total: .constant(1000),goal: .constant(GoalData.mockGoal))
     MoneySummaryComponent_Test(
         isShowingGoalSetting: .constant(true),
-        total: .constant(1000),goal: .constant(Goal.mockGoal))
+        total: .constant(1000),goal: .constant(GoalData.mockGoal))
 }

@@ -15,6 +15,12 @@ struct CustomLayout: View {
         }
         .modifier(CustomButtonLayout())
         
+        Button(action:{}){
+            Text("ふやす")
+                .modifier(CustomGreenButton(fontType: .headline))
+        }
+        
+        
         Text("色を変える")
             .modifier(CustomButtonLayoutWithSetColor(textColor: Color.white,backGroundColor: Color.green,fontType: .largeTitle))
     }
@@ -32,7 +38,7 @@ struct CustomButtonLayout:ViewModifier {
             .foregroundColor(.white)
             .font(.title)
             .cornerRadius(15)
-            .shadow(radius: 5) // 影をつける
+//            .shadow(radius: 5) // 影をつける
             .padding()
     }
 }
@@ -48,7 +54,20 @@ struct CustomButtonLayoutWithSetColor:ViewModifier {
             .foregroundColor(textColor)
             .font(fontType)
             .cornerRadius(15)
-            .shadow(radius: 5) // 影をつける
+//            .shadow(radius: 5) // 影をつける
+            .padding()
+    }
+}
+
+struct CustomGreenButton:ViewModifier {
+    var fontType: Font
+    func body(content: Content) -> some View {
+        content
+            .frame(width: 100, height: 35)
+            .background(.green)
+            .foregroundColor(.white)
+            .font(fontType)
+            .cornerRadius(7)
             .padding()
     }
 }

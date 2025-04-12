@@ -6,10 +6,14 @@
 //
 
 import SwiftUI
+import RealmSwift
 
 struct MoneyInputView: View {
     @Binding var isShowingSheet: Bool
-    @Environment(\.modelContext) private var modelContext
+    @Binding var editMoney: MoneyData?
+    @ObservedResults(Money.self) var moneys
+    var user: User
+    
     @State var moneyType: MoneyType = .expense
     
     @State var inputPrice: String = ""
@@ -21,7 +25,7 @@ struct MoneyInputView: View {
     
     var body: some View {
         VStack{
-            InputTitleView(isShowingSheet: $isShowingSheet, moneyType: $moneyType, selectedIncomeType: $selectedIncomeType, selectedExpenseType: $selectedExpenseType)
+            InputTitleView(isShowingSheet: $isShowingSheet, moneyType: $moneyType, selectedIncomeType: $selectedIncomeType, selectedExpenseType: $selectedExpenseType,editMoney: $editMoney)
             Divider()
             Text(moneyType == .income ? "もらったお金のしゅるい" : "何につかった？")
             
@@ -73,10 +77,15 @@ struct MoneyInputView: View {
             }
 
             Button(action: {
-                insertMoneyItem()
+                if let editMoney = editMoney {
+                    updateMoneyItem()
+                } else {
+                    insertMoneyItem()
+                }
+                
                 isShowingSheet = false
             }){
-                Text("追加する")
+                Text((editMoney != nil) ? "書き換える" : "追加する")
                     .modifier(CustomButtonLayoutWithSetColor(textColor: .white, backGroundColor: .blue, fontType: .title))
             }
             Spacer()
@@ -85,7 +94,37 @@ struct MoneyInputView: View {
         .overlay(){
             selectDateView(selectedDate: $selectedDate, isShowCalendar: $isShowCalendar)
         }
+        .onAppear(){
+            if let editMoney = editMoney {
+                inputPrice = String(editMoney.price)
+                
+                selectedIncomeType = editMoney.incomeType
+                selectedExpenseType = editMoney.expenseType
+                
+                inputMemo = editMoney.memo != nil ? editMoney.memo! : ""
+                selectedDate = editMoney.timestamp
+            }
+        }
     }
+    
+    func updateUser(_ user: User) {
+        let realm = try! Realm()
+        
+        let users = realm.objects(User.self)
+        let userToUpdate = users.filter { $0.id == user.id }.first!
+        
+        let money = Money()
+        money.price = 200
+        money.moneyType = .income
+        money.incomeType = .monthlyPayment
+        money.memo = "めもめも"
+        money.timestamp = Date()
+        
+        try! realm.write {
+            userToUpdate.moneys.append(money)
+        }
+    }
+    
     
     func insertMoneyItem() {
         if (selectedIncomeType == nil && selectedExpenseType == nil), let priceValue = Int(inputPrice) {
@@ -96,21 +135,93 @@ struct MoneyInputView: View {
         }
         // お小遣いを追加する
         if  moneyType == .income, let priceValue = Int(inputPrice), let _ = selectedIncomeType {
+            let realm = try! Realm()
+            
+            let users = realm.objects(User.self)
+            let userToUpdate = users.filter { $0.id == user.id }.first!
+            
             let newItem = Money(price: priceValue, moneyType: moneyType, incomeType: selectedIncomeType, memo: inputMemo, timestamp: selectedDate)
-            modelContext.insert(newItem)
-            try? modelContext.save()
+            
+            try! realm.write {
+                userToUpdate.moneys.append(newItem)
+            }
+            
+            selectedIncomeType = nil
             print("おこづかいを追加する")
             return
         }
         // 何に使ったか
         if moneyType == .expense, let priceValue = Int(inputPrice), let _ = selectedExpenseType {
+            let realm = try! Realm()
+            
+            let users = realm.objects(User.self)
+            let userToUpdate = users.filter { $0.id == user.id }.first!
+            
             let newItem = Money(price: priceValue, moneyType: moneyType, expenseType: selectedExpenseType, memo: inputMemo, timestamp: selectedDate)
-            modelContext.insert(newItem)
+            
+            try! realm.write {
+                userToUpdate.moneys.append(newItem)
+            }
+
             selectedExpenseType = nil
             print("何に使ったか")
             return
         }
     }
+    
+    func updateMoneyItem() {
+        guard let editMoney = editMoney else {
+            print("更新できない")
+            return
+        }
+        
+        if (selectedIncomeType == nil && selectedExpenseType == nil), let priceValue = Int(inputPrice) {
+            print("エラー: 更新するお小遣いまたは支出の種類を指定してください。\(priceValue)円")
+            return
+        } else {
+            print("更新処理へ")
+        }
+        // お小遣いを追加する
+        if  moneyType == .income,
+            let priceValue = Int(inputPrice),
+            let selectedType = selectedIncomeType,
+            let realm = try? Realm(),
+            let userToUpdate = realm.object(ofType: User.self, forPrimaryKey: user.id),
+            let moneyToUpdate = userToUpdate.moneys.first(where: { $0.id == editMoney.id })
+        {
+            try! realm.write {
+                moneyToUpdate.price = priceValue
+                moneyToUpdate.moneyType = moneyType
+                moneyToUpdate.incomeType = selectedType
+                moneyToUpdate.memo = inputMemo
+                moneyToUpdate.timestamp = selectedDate
+            }
+
+            selectedIncomeType = nil
+            print("おこづかいを更新した")
+            return
+        }
+        // 何に使ったか
+        if moneyType == .expense,
+           let priceValue = Int(inputPrice),
+           let selectedType = selectedExpenseType,
+           let realm = try? Realm(),
+           let userToUpdate = realm.object(ofType: User.self, forPrimaryKey: user.id),
+           let moneyToUpdate = userToUpdate.moneys.first(where: { $0.id == editMoney.id })
+        {
+            try! realm.write {
+                moneyToUpdate.price = priceValue
+                moneyToUpdate.moneyType = moneyType
+                moneyToUpdate.expenseType = selectedType
+                moneyToUpdate.memo = inputMemo
+                moneyToUpdate.timestamp = selectedDate
+            }
+            selectedExpenseType = nil
+            print("何に使ったか")
+            return
+        }
+    }
+    
     func addMoneyByDate() {
         let calendar = Calendar.current
         if let specificDate = calendar.date(from: DateComponents(year: 2025, month: 2, day: 1)) {
@@ -119,17 +230,23 @@ struct MoneyInputView: View {
     }
     private func addMoneyByDate(by date: Date) {
         withAnimation {
+            let realm = try! Realm()
+            
+            let users = realm.objects(User.self)
+            let userToUpdate = users.filter { $0.id == user.id }.first!
             
             let newItem = Money(price: 100, moneyType: .income, incomeType: .familySupport, memo: "メモメモ", timestamp: date)
-            modelContext.insert(newItem)
-            try? modelContext.save()
+            
+            try! realm.write {
+                userToUpdate.moneys.append(newItem)
+            }
         }
     }
     
 }
 
 #Preview {
-    MoneyInputView(isShowingSheet: .constant(true))
+    MoneyInputView(isShowingSheet: .constant(true),editMoney: .constant(MoneyData()), user: User())
 }
 
 import SwiftUI
@@ -148,20 +265,6 @@ struct BorderedTextModifier: ViewModifier {
             )
     }
 }
-
-//struct CustomButtonLayout:ViewModifier {
-//    func body(content: Content) -> some View {
-//        content
-//            .frame(width: UIScreen.main.bounds.width * 0.8, height: 70)
-//            .buttonStyle(.borderedProminent)
-//            .tint(Color.blue)
-//            .foregroundColor(.white)
-//            .font(.title)
-//            .cornerRadius(15)
-//            .shadow(radius: 5) // 影をつける
-//            .padding()
-//    }
-//}
 
 struct BorderedTextChangeColor: ViewModifier {
     var isSelected: Bool
@@ -279,6 +382,7 @@ struct InputTitleView: View {
     @Binding var moneyType: MoneyType
     @Binding var selectedIncomeType: IncomeType?
     @Binding var selectedExpenseType: ExpenseType?
+    @Binding var editMoney: MoneyData?
     var body: some View {
         HStack {
             Button(action:{
@@ -293,6 +397,10 @@ struct InputTitleView: View {
                 Image(systemName: "arrow.trianglehead.2.clockwise.rotate.90")
                     .padding()
             }
+            .opacity(editMoney == nil ? 1 : 0)
+            .disabled(editMoney != nil)
+
+            
             Spacer()
             Text("記録する")
                 .font(.title)

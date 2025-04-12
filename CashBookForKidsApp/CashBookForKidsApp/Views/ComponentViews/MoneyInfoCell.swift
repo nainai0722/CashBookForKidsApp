@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MoneyInfoCell: View {
-    var money :Money = Money(price: 0, moneyType: .income, incomeType: .familySupport, expenseType: nil, memo: "メモメモ", timestamp: Date())
+    var money :MoneyData = MoneyData(price: 0, moneyType: .income, incomeType: .familySupport, expenseType: nil, memo: "メモメモ", timestamp: Date())
     var body: some View {
         
         HStack {
@@ -28,7 +28,7 @@ struct MoneyInfoCell: View {
         .padding(.horizontal, 20)
     }
     
-    func moneyContent(money:Money) -> String {
+    func moneyContent(money:MoneyData) -> String {
         var moneyContent : String = ""
         if (money.moneyType == .income) {
             if let incomeType = money.incomeType {

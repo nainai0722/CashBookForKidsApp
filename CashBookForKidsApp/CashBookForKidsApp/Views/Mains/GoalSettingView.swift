@@ -6,15 +6,17 @@
 //
 
 import SwiftUI
-import SwiftData
+import RealmSwift
 
 struct GoalSettingView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var moneys: [Money]
-    @Query var userInfo:[UserInfo]
+//    @Environment(\.modelContext) private var modelContext
+//    @Query private var moneys: [Money]
+//    @Query var userInfo:[UserInfo]
+    @ObservedResults(Money.self) var moneys
+    @ObservedResults(UserInfo.self) var userInfos
     @State var total :Int = 1000
-    @State var goal: Goal = Goal.mockGoal
-    var goals :[Goal] = Goal.mockGoalsList
+    @State var goal: GoalData = GoalData.mockGoal
+    var goals :[GoalData] = GoalData.mockGoalsList
     
     var isAchieved :Bool {
         if result <= 0 {
@@ -42,10 +44,10 @@ struct GoalSettingView: View {
                     
                     VStack {
                         if isAchieved {
-                            BubbleView(text: "次は\(nextGaolSetting().amount)円を目指そう")
-                                .foregroundStyle(.green)
+//                            BubbleView(text: "次は\(nextGaolSetting().amount)円を目指そう")
+//                                .foregroundStyle(.green)
                             Button (action:{
-                                goal = nextGaolSetting()
+//                                goal = nextGaolSetting()
                             })
                             {
                                 Text("次の目標を設定する")
@@ -65,13 +67,13 @@ struct GoalSettingView: View {
     }
     
     
-    func nextGaolSetting() ->  Goal{
-        guard let nextGoal = goals.filter { $0.level == goal.level + 1}.first else {
-            return goal
-        }
-        print("nextGaolLevel: \(nextGoal.level) amount:\(nextGoal.amount)")
-        return nextGoal
-    }
+//    func nextGaolSetting() ->  Goal{
+//        guard let nextGoal = goals.filter { $0.level == goal.level + 1}.first else {
+//            return goal
+//        }
+//        print("nextGaolLevel: \(nextGoal.level) amount:\(nextGoal.amount)")
+//        return nextGoal
+//    }
 
 }
 
