@@ -9,6 +9,7 @@ import SwiftUI
 import RealmSwift
 
 struct RealmControl: View {
+    @Environment(\.presentationMode) var presentationMode:Binding<PresentationMode>
     //RealmのオブジェクトをSwiftUIのViewにバインドして、変更を自動でUIに反映させる プロパティラッパー
     @ObservedResults(User.self) var users
     
@@ -26,6 +27,15 @@ struct RealmControl: View {
     var body: some View {
         VStack {
             
+            Button(action: {
+                //閉じるときは以下を呼び出す
+                self.presentationMode.wrappedValue.dismiss()
+            }){
+                Image(systemName: "xmark.circle")
+                    .frame(width: 50, height: 50)
+                    .padding(.trailing,30)
+            }
+            
             Button("ゆの追加") {
                 addUser("ゆの")
             }
@@ -34,26 +44,26 @@ struct RealmControl: View {
                 addUser("えま")
             }
             
-            Button("はなこ追加") {
-                addUser("はなこ")
-            }
-            
-            Button("ユーザー削除") {
-                deleteUser()
-            }
-            
-            Button("おこづかい追加") {
-                if let user = taroUsers.first {
-                    print(user.name)
-                    print(user.id)
-                    updateUser(user)
-                }
-            }
-            
-            Button("おこづかい削除") {
-                // 今は未実装
-            }
-            
+//            Button("はなこ追加") {
+//                addUser("はなこ")
+//            }
+//            
+//            Button("ユーザー削除") {
+//                deleteUser()
+//            }
+//            
+//            Button("おこづかい追加") {
+//                if let user = taroUsers.first {
+//                    print(user.name)
+//                    print(user.id)
+//                    updateUser(user)
+//                }
+//            }
+//            
+//            Button("おこづかい削除") {
+//                // 今は未実装
+//            }
+//            
             List {
                 ForEach(taroUsers) { user in
                     ForEach(user.moneys) { money in
@@ -66,32 +76,60 @@ struct RealmControl: View {
                     }
                 }
             }
+            List {
+                ForEach(users) { user in
+                    Text(user.name)
+                }
+            }
         }
     }
     
     func addUser(_ name: String) {
         let realm = try! Realm()
         
+        // すでに同じ名前のユーザーがいるかチェック
+        if realm.objects(User.self).filter("name == %@", name).first != nil {
+            print("同じ名前のユーザーが存在します。追加をキャンセルします。")
+            return
+        }
+        
         let child = User()
         child.name = name
         
-        let money = Money()
-        money.price = 1000
-        money.moneyType = .income
-        money.incomeType = .monthlyPayment
-        money.memo = "月のおこづかい"
-        money.timestamp = Date()
-        
-        child.moneys.append(money)
-        child.moneys.append(money)
-        
         try! realm.write {
+            
+            
             realm.add(child)
             print(child.id)
         }
         saveUserIds(child.id)
-        
     }
+//    おこづかい追加版
+//    func addUser(_ name: String) {
+//        let realm = try! Realm()
+//        
+//        let child = User()
+//        child.name = name
+//        
+//        let money = Money()
+//        money.price = 1000
+//        money.moneyType = .income
+//        money.incomeType = .monthlyPayment
+//        money.memo = "月のおこづかい"
+//        money.timestamp = Date()
+//        
+////        child.moneys.append(money)
+////        child.moneys.append(money)
+//        
+//        try! realm.write {
+//            
+//            
+//            realm.add(child)
+//            print(child.id)
+//        }
+//        saveUserIds(child.id)
+//        
+//    }
     
     func saveUserIds(_ ids: String) {
         var savedUserIds = loadUserIds()

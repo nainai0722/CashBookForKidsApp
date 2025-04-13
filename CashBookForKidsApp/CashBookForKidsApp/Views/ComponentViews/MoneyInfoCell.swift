@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct MoneyInfoCell: View {
-    var money :MoneyData = MoneyData(price: 0, moneyType: .income, incomeType: .familySupport, expenseType: nil, memo: "メモメモ", timestamp: Date())
+//    var money :MoneyData = MoneyData(price: 0, moneyType: .income, incomeType: .familySupport, expenseType: nil, memo: "メモメモ", timestamp: Date())
+    var money :MoneyData = MoneyData(price: 1000, moneyType: .expense, incomeType: nil, expenseType: .shopping, memo: "メモメモ", timestamp: Date())
     var body: some View {
         
         HStack {

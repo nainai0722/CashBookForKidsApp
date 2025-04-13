@@ -8,7 +8,7 @@
 import Foundation
 import RealmSwift
 
-class Money: Object, Identifiable {
+class Money: Object, ObjectKeyIdentifiable {
     @Persisted(primaryKey: true) var id: String = UUID().uuidString
     @Persisted var price: Int
     @Persisted var moneyType:MoneyType
@@ -50,7 +50,7 @@ enum MoneyType: String, CaseIterable, Codable,PersistableEnum {
     case expense = "使ったお金"
 }
 
-enum IncomeType: String, CaseIterable, Codable,PersistableEnum {
+enum IncomeType: String, CaseIterable, Codable, PersistableEnum {
     case familySupport = "家族の手伝い"
     case study = "勉強"
     case monthlyPayment = "毎月のおこづかい"

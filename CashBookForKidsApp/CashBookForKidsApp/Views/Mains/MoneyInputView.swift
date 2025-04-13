@@ -11,8 +11,10 @@ import RealmSwift
 struct MoneyInputView: View {
     @Binding var isShowingSheet: Bool
     @Binding var editMoney: MoneyData?
+    @Binding var refreshID :UUID
     @ObservedResults(Money.self) var moneys
-    var user: User
+    @ObservedRealmObject var user: User
+//    var user: User
     
     @State var moneyType: MoneyType = .expense
     
@@ -24,86 +26,100 @@ struct MoneyInputView: View {
     @State var isShowCalendar:Bool = false
     
     var body: some View {
-        VStack{
-            InputTitleView(isShowingSheet: $isShowingSheet, moneyType: $moneyType, selectedIncomeType: $selectedIncomeType, selectedExpenseType: $selectedExpenseType,editMoney: $editMoney)
-            Divider()
-            Text(moneyType == .income ? "もらったお金のしゅるい" : "何につかった？")
-            
-            if moneyType == .income {
-
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 10) {
-                        ForEach(IncomeType.allCases, id: \.self) { incomeType in
-                            Button(action: {
-                                
-                                selectedIncomeType = incomeType
-                            } ) {
-                                Text(incomeType.rawValue)
-                                    .foregroundColor(incomeType == selectedIncomeType ? .white :.blue)
-                                    .modifier(BorderedTextChangeColor(isSelected: incomeType == selectedIncomeType))
-                            }
-                        }
-                    }
-                }
-            } else {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 10) {
-                        ForEach(ExpenseType.allCases, id: \.self) { expenseType in
-                            Button(action: {
-                                selectedExpenseType = expenseType
-                            } ) {
-                                Text(expenseType.rawValue)
-                                    .foregroundColor(expenseType == selectedExpenseType ? .white :.blue)
-                                    .modifier(BorderedTextChangeColor(isSelected: expenseType == selectedExpenseType))
-                            }
-                        }
-                    }
-                }
-            }
-            
-            InputPriceView(inputPrice: $inputPrice)
-            SelectMoneyButtonListView(inputPrice: $inputPrice)
-            
-            InputMemoView(inputMemo: $inputMemo)
-            
-            Button(action: {
-                isShowCalendar.toggle()
-            }){
-                VStack {
-                    Text("登録する日付は\(selectedDate.formattedYearMonthDayString)")
+        ZStack {
+            Color(.systemBackground) // ←背景色を指定しないとタップが通らないことがある
+                        .ignoresSafeArea()
+            VStack{
+                InputTitleView(isShowingSheet: $isShowingSheet, moneyType: $moneyType, selectedIncomeType: $selectedIncomeType, selectedExpenseType: $selectedExpenseType,editMoney: $editMoney)
+                Divider()
+                Text(moneyType == .income ? "もらったお金のしゅるい" : "何につかった？")
+                
+                if moneyType == .income {
                     
-                }
-                .modifier(CustomButtonLayoutWithSetColor(textColor: .white, backGroundColor: .blue, fontType: .headline))
-            }
-
-            Button(action: {
-                if let editMoney = editMoney {
-                    updateMoneyItem()
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 10) {
+                            ForEach(IncomeType.allCases, id: \.self) { incomeType in
+                                Button(action: {
+                                    
+                                    selectedIncomeType = incomeType
+                                } ) {
+                                    Text(incomeType.rawValue)
+                                        .foregroundColor(incomeType == selectedIncomeType ? .white :.blue)
+                                        .modifier(BorderedTextChangeColor(isSelected: incomeType == selectedIncomeType))
+                                }
+                            }
+                        }
+                    }
                 } else {
-                    insertMoneyItem()
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 10) {
+                            ForEach(ExpenseType.allCases, id: \.self) { expenseType in
+                                Button(action: {
+                                    selectedExpenseType = expenseType
+                                } ) {
+                                    Text(expenseType.rawValue)
+                                        .foregroundColor(expenseType == selectedExpenseType ? .white :.blue)
+                                        .modifier(BorderedTextChangeColor(isSelected: expenseType == selectedExpenseType))
+                                }
+                            }
+                        }
+                    }
                 }
                 
-                isShowingSheet = false
-            }){
-                Text((editMoney != nil) ? "書き換える" : "追加する")
-                    .modifier(CustomButtonLayoutWithSetColor(textColor: .white, backGroundColor: .blue, fontType: .title))
-            }
-            Spacer()
-
-        }
-        .overlay(){
-            selectDateView(selectedDate: $selectedDate, isShowCalendar: $isShowCalendar)
-        }
-        .onAppear(){
-            if let editMoney = editMoney {
-                inputPrice = String(editMoney.price)
+                InputPriceView(inputPrice: $inputPrice)
+                SelectMoneyButtonListView(inputPrice: $inputPrice)
+                    
+                VStack(spacing: 0){
+                    Text("")
+                }
+                .frame(width: UIScreen.main.bounds.width)
+                .frame(height: 50)
+//                .background(.red)
+                .hideKeyboardOnTap()
                 
-                selectedIncomeType = editMoney.incomeType
-                selectedExpenseType = editMoney.expenseType
+                Button(action: {
+                    if let editMoney = editMoney {
+                        updateMoneyItem()
+                    } else {
+                        insertMoneyItem()
+                    }
+                    
+                    isShowingSheet = false
+                }){
+                    Text((editMoney != nil) ? "書き換える" : "追加する")
+                        .modifier(CustomButtonLayoutWithSetColor(textColor: .white, backGroundColor: .blue, fontType: .title))
+                }
                 
-                inputMemo = editMoney.memo != nil ? editMoney.memo! : ""
-                selectedDate = editMoney.timestamp
+                InputMemoView(inputMemo: $inputMemo)
+                
+                Button(action: {
+                    isShowCalendar.toggle()
+                }){
+                    VStack {
+                        Text("登録する日付は\(selectedDate.formattedYearMonthDayString)")
+                        
+                    }
+                    .modifier(CustomButtonLayoutWithSetColor(textColor: .white, backGroundColor: .blue, fontType: .headline))
+                }
+                
+                Spacer()
+                
             }
+            .overlay(){
+                selectDateView(selectedDate: $selectedDate, isShowCalendar: $isShowCalendar)
+            }
+            .onAppear(){
+                if let editMoney = editMoney {
+                    inputPrice = String(editMoney.price)
+                    
+                    selectedIncomeType = editMoney.incomeType
+                    selectedExpenseType = editMoney.expenseType
+                    
+                    inputMemo = editMoney.memo != nil ? editMoney.memo! : ""
+                    selectedDate = editMoney.timestamp
+                }
+            }
+            .hideKeyboardOnTap()
         }
     }
     
@@ -147,6 +163,7 @@ struct MoneyInputView: View {
             }
             
             selectedIncomeType = nil
+            refreshID = UUID()
             print("おこづかいを追加する")
             return
         }
@@ -164,6 +181,7 @@ struct MoneyInputView: View {
             }
 
             selectedExpenseType = nil
+            refreshID = UUID()
             print("何に使ったか")
             return
         }
@@ -181,43 +199,60 @@ struct MoneyInputView: View {
         } else {
             print("更新処理へ")
         }
+        
         // お小遣いを追加する
         if  moneyType == .income,
             let priceValue = Int(inputPrice),
             let selectedType = selectedIncomeType,
-            let realm = try? Realm(),
-            let userToUpdate = realm.object(ofType: User.self, forPrimaryKey: user.id),
-            let moneyToUpdate = userToUpdate.moneys.first(where: { $0.id == editMoney.id })
+            let moneyToUpdate = user.moneys.first(where: { $0.id == editMoney.id })
         {
-            try! realm.write {
-                moneyToUpdate.price = priceValue
-                moneyToUpdate.moneyType = moneyType
-                moneyToUpdate.incomeType = selectedType
-                moneyToUpdate.memo = inputMemo
-                moneyToUpdate.timestamp = selectedDate
+            
+            let realm = try! Realm()
+
+            // thawして、解凍されたオブジェクトに対して書き込みを行う
+            if let thawedMoney = moneyToUpdate.thaw() {
+                try! realm.write {
+                    thawedMoney.price = priceValue
+                    thawedMoney.moneyType = moneyType
+                    thawedMoney.incomeType = selectedType
+                    thawedMoney.memo = inputMemo
+                    thawedMoney.timestamp = selectedDate
+                    print("おこづかいを更新した")
+                    refreshID = UUID()
+                }
+            } else {
+                print("thawに失敗しました（オブジェクトが無効になっている可能性あり）")
             }
 
+
             selectedIncomeType = nil
-            print("おこづかいを更新した")
             return
         }
         // 何に使ったか
-        if moneyType == .expense,
-           let priceValue = Int(inputPrice),
-           let selectedType = selectedExpenseType,
-           let realm = try? Realm(),
-           let userToUpdate = realm.object(ofType: User.self, forPrimaryKey: user.id),
-           let moneyToUpdate = userToUpdate.moneys.first(where: { $0.id == editMoney.id })
+        if  moneyType == .expense,
+            let priceValue = Int(inputPrice),
+            let selectedType = selectedExpenseType,
+            let moneyToUpdate = user.moneys.first(where: { $0.id == editMoney.id })
         {
-            try! realm.write {
-                moneyToUpdate.price = priceValue
-                moneyToUpdate.moneyType = moneyType
-                moneyToUpdate.expenseType = selectedType
-                moneyToUpdate.memo = inputMemo
-                moneyToUpdate.timestamp = selectedDate
+            
+            let realm = try! Realm()
+
+            // thawして、解凍されたオブジェクトに対して書き込みを行う
+            if let thawedMoney = moneyToUpdate.thaw() {
+                try! realm.write {
+                    thawedMoney.price = priceValue
+                    thawedMoney.moneyType = moneyType
+                    thawedMoney.expenseType = selectedType
+                    thawedMoney.memo = inputMemo
+                    thawedMoney.timestamp = selectedDate
+                    print("使ったお金を更新した")
+                    refreshID = UUID()
+                }
+            } else {
+                print("thawに失敗しました（オブジェクトが無効になっている可能性あり）")
             }
-            selectedExpenseType = nil
-            print("何に使ったか")
+
+            selectedIncomeType = nil
             return
         }
     }
@@ -246,7 +281,7 @@ struct MoneyInputView: View {
 }
 
 #Preview {
-    MoneyInputView(isShowingSheet: .constant(true),editMoney: .constant(MoneyData()), user: User())
+    MoneyInputView(isShowingSheet: .constant(true),editMoney: .constant(MoneyData()), refreshID: .constant(UUID()), user: User())
 }
 
 import SwiftUI
@@ -343,7 +378,7 @@ struct InputMemoView: View {
         VStack {
             HStack(spacing:0) {
                 TextField("メモを入力", text: $inputMemo)
-                    .keyboardType(.numberPad)
+                    .keyboardType(.default)
                     .multilineTextAlignment(.trailing) // テキスト入力も左寄せ
                     .font(.system(size: 30))
                     .padding(.trailing, 45)

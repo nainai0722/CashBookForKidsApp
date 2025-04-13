@@ -9,29 +9,30 @@ import SwiftUI
 import RealmSwift
 
 struct MultiUserTabView: View {
-    @State private var savedUsers: [User] = []
+    @State var isShowFullScreen: Bool = false
+    @ObservedResults(User.self) var users
 
     var body: some View {
-        TabView {
-            ForEach(savedUsers) { user in
-                UserDetailView(user: user)
+        VStack {
+            TabView {
+                ForEach(users) { user in
+                    UserMoneyListView(user: user)
+                        .tabItem {
+                            Text(user.name)
+                        }
+                }
+                SettingView()
                     .tabItem {
-                        Text(user.name)
+                        Text("設定")
                     }
+            }
+            .fullScreenCover(isPresented: $isShowFullScreen) {
+                RealmControl()
             }
         }
         .onAppear {
-            loadSavedUsers()
+            isShowFullScreen = users.isEmpty ? true : false
         }
-    }
-
-    func loadSavedUsers() {
-        let savedIds = UserDefaults.standard.stringArray(forKey: "savedUserIds") ?? []
-        let realm = try! Realm()
-        let users = savedIds.compactMap { id in
-            realm.object(ofType: User.self, forPrimaryKey: id)
-        }
-        self.savedUsers = Array(users.prefix(3)) // 上限3人に制限
     }
 }
 
