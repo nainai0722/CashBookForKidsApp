@@ -7,11 +7,41 @@
 
 import SwiftUI
 import RealmSwift
+import FirebaseCore
+
+class AppDelegate: NSObject, UIApplicationDelegate {
+  func application(_ application: UIApplication,
+                   didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+    FirebaseApp.configure()
+
+    return true
+  }
+}
 
 @main
 struct CashBookForKidsAppApp: SwiftUI.App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     init() {
+        initRealm()
         userDataFromRealm()
+    }
+    
+    func initRealm() {
+        let config = Realm.Configuration(
+            schemaVersion: 2, // ← 今のバージョン +1 にする（例）
+            migrationBlock: { migration, oldSchemaVersion in
+                if oldSchemaVersion < 2 {
+                    // 今回の変更では特に何もする必要はない
+                    // Realmが自動的に新しい List プロパティを追加してくれる
+                }
+            }
+        )
+
+        Realm.Configuration.defaultConfiguration = config
+
+        // Realmを使う（初期化）タイミングで有効に
+        let realm = try! Realm()
+        print("Realm initialized successfully.")
     }
     
     func userDataFromRealm() {

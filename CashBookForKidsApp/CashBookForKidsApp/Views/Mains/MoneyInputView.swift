@@ -7,6 +7,7 @@
 
 import SwiftUI
 import RealmSwift
+import FirebaseAnalytics
 
 struct MoneyInputView: View {
     @Binding var isShowingSheet: Bool
@@ -24,6 +25,8 @@ struct MoneyInputView: View {
     @State var selectedExpenseType: ExpenseType?
     @State var selectedDate: Date = Date()
     @State var isShowCalendar:Bool = false
+    
+    @State var isAlert: Bool = false
     
     var body: some View {
         ZStack {
@@ -78,16 +81,24 @@ struct MoneyInputView: View {
                 .hideKeyboardOnTap()
                 
                 Button(action: {
+                    if (selectedIncomeType == nil || selectedExpenseType == nil), let priceValue = Int(inputPrice) {
+                        isAlert.toggle()
+                        return
+                    }
                     if let editMoney = editMoney {
-                        updateMoneyItem()
+                        updateMoneyItem(editMoney)
                     } else {
                         insertMoneyItem()
                     }
-                    
                     isShowingSheet = false
                 }){
                     Text((editMoney != nil) ? "書き換える" : "追加する")
                         .modifier(CustomButtonLayoutWithSetColor(textColor: .white, backGroundColor: .blue, fontType: .title))
+                }
+                .alert(isPresented: $isAlert) {
+                    Alert(title: Text("エラー"),
+                                     message: Text("更新するお小遣いまたは支出の種類を指定してください。"),
+                                     dismissButton: .default(Text("閉じる")))
                 }
                 
                 InputMemoView(inputMemo: $inputMemo)
@@ -123,32 +134,7 @@ struct MoneyInputView: View {
         }
     }
     
-    func updateUser(_ user: User) {
-        let realm = try! Realm()
-        
-        let users = realm.objects(User.self)
-        let userToUpdate = users.filter { $0.id == user.id }.first!
-        
-        let money = Money()
-        money.price = 200
-        money.moneyType = .income
-        money.incomeType = .monthlyPayment
-        money.memo = "めもめも"
-        money.timestamp = Date()
-        
-        try! realm.write {
-            userToUpdate.moneys.append(money)
-        }
-    }
-    
-    
     func insertMoneyItem() {
-        if (selectedIncomeType == nil && selectedExpenseType == nil), let priceValue = Int(inputPrice) {
-            print("エラー: 追加するお小遣いまたは支出の種類を指定してください。\(priceValue)円")
-            return
-        } else {
-            print("保存処理へ")
-        }
         // お小遣いを追加する
         if  moneyType == .income, let priceValue = Int(inputPrice), let _ = selectedIncomeType {
             let realm = try! Realm()
@@ -165,7 +151,18 @@ struct MoneyInputView: View {
             selectedIncomeType = nil
             refreshID = UUID()
             print("おこづかいを追加する")
+            
+            Analytics.setAnalyticsCollectionEnabled(true)
+            
+            Analytics.logEvent("add_allowance", parameters: [
+                    "price": priceValue,
+                    "moneyType": moneyType.rawValue,
+                    "memo": inputMemo,
+                    "incomeType": selectedIncomeType?.rawValue ?? "値が取れませんでした"
+            ])
             return
+        } else {
+            print("お小遣いの追加失敗")
         }
         // 何に使ったか
         if moneyType == .expense, let priceValue = Int(inputPrice), let _ = selectedExpenseType {
@@ -183,23 +180,18 @@ struct MoneyInputView: View {
             selectedExpenseType = nil
             refreshID = UUID()
             print("何に使ったか")
+            Analytics.logEvent("add_allowance", parameters: [
+                    "price": priceValue,
+                    "moneyType": moneyType.rawValue,
+                    "memo": inputMemo,
+                    "incomeType": selectedExpenseType?.rawValue ?? "値が取れませんでした"
+                ])
+            
             return
         }
     }
     
-    func updateMoneyItem() {
-        guard let editMoney = editMoney else {
-            print("更新できない")
-            return
-        }
-        
-        if (selectedIncomeType == nil && selectedExpenseType == nil), let priceValue = Int(inputPrice) {
-            print("エラー: 更新するお小遣いまたは支出の種類を指定してください。\(priceValue)円")
-            return
-        } else {
-            print("更新処理へ")
-        }
-        
+    func updateMoneyItem(_ editMoney: MoneyData) {
         // お小遣いを追加する
         if  moneyType == .income,
             let priceValue = Int(inputPrice),
@@ -218,6 +210,12 @@ struct MoneyInputView: View {
                     thawedMoney.memo = inputMemo
                     thawedMoney.timestamp = selectedDate
                     print("おこづかいを更新した")
+                    Analytics.logEvent("update_allowance", parameters: [
+                            "price": priceValue,
+                            "moneyType": moneyType.rawValue,
+                            "memo": inputMemo,
+                            "incomeType": selectedIncomeType?.rawValue ?? "値が取れませんでした"
+                    ])
                     refreshID = UUID()
                 }
             } else {
@@ -246,6 +244,12 @@ struct MoneyInputView: View {
                     thawedMoney.memo = inputMemo
                     thawedMoney.timestamp = selectedDate
                     print("使ったお金を更新した")
+                    Analytics.logEvent("update_allowance", parameters: [
+                            "price": priceValue,
+                            "moneyType": moneyType.rawValue,
+                            "memo": inputMemo,
+                            "incomeType": selectedExpenseType?.rawValue ?? "値が取れませんでした"
+                    ])
                     refreshID = UUID()
                 }
             } else {

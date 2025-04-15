@@ -12,13 +12,14 @@ class User: Object,ObjectKeyIdentifiable {
     @Persisted(primaryKey: true) var id: String = UUID().uuidString
     @Persisted var name: String
     @Persisted var moneys = List<Money>()
+    @Persisted var savingPlans = List<SavingPlan>()
     
     // サーバ同期用
     @Persisted var lastSyncedAt: Date?
     @Persisted var createdAt: Date = Date()
     @Persisted var updatedAt: Date = Date()
     
-    convenience init(id: String, name: String, moneys: List<Money> = List<Money>(), lastSyncedAt: Date? = nil, createdAt: Date, updatedAt: Date) {
+    convenience init(id: String, name: String, moneys: List<Money> = List<Money>(), savingPlans: List<SavingPlan> = List<SavingPlan>(), lastSyncedAt: Date? = nil, createdAt: Date, updatedAt: Date) {
         self.init()
         self.id = id
         self.name = name
@@ -31,7 +32,6 @@ class User: Object,ObjectKeyIdentifiable {
     override init() {
         super .init()
         self.name = "テスト太郎"
-//        self.moneys.append(Money())
         self.lastSyncedAt = Date()
         self.createdAt = Date()
         self.updatedAt = Date()

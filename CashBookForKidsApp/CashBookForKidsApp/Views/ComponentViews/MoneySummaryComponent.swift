@@ -34,6 +34,17 @@ struct MoneySummaryComponent: View {
             VStack(alignment:.leading) {
                 HStack {
                     Spacer()
+                    Button("Show Popover") {
+                        isShowingGoalSetting = true
+                    }
+                    .popover(isPresented: $isShowingGoalSetting) {
+                        Text(goalAchieved())
+                            .padding()
+                            .foregroundStyle(.background)
+                            .presentationBackground(.orange)
+                            .presentationCompactAdaptation(.popover)
+                    }
+                    
                     Button(action:{
                         isShowingGoalSetting = true
                         isShowingMoneyDetail = false
@@ -47,6 +58,13 @@ struct MoneySummaryComponent: View {
                 HStack {
                     Text("おこづかい")
                         .font(.headline)
+                        .popover(isPresented: $isShowingGoalSetting) {
+                            Text(goalAchieved())
+                                .padding()
+                                .foregroundStyle(.background)
+                                .presentationBackground(.orange)
+                                .presentationCompactAdaptation(.popover)
+                        }
                     Spacer()
                     Text(currentDateString + "現在")
                         .foregroundStyle(.white.opacity(0.9))
@@ -121,6 +139,7 @@ struct MoneySummaryComponent_Test: View {
         ZStack {
             Rectangle().fill(Color.green)
                 .cornerRadius(20)
+            
         }
         .frame(height: 200)
         .padding(20)
