@@ -12,3 +12,9 @@
   <img src="Images/image5.png" alt="キャプチャ5" width="150">
 </p>
 
+## 使用技術
+
+- SwiftUI
+- Firebase Firestore（クラウドデータベース）
+- RealmSwift（ローカルデータ保存）
+- Git / GitHub
