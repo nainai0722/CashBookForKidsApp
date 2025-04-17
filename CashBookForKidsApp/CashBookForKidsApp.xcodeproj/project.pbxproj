@@ -11,6 +11,7 @@
 		F8E28D002DAA8B6F008D2549 /* RealmSwift in Embed Frameworks */ = {isa = PBXBuildFile; productRef = F8D23ACB2DA8D3B800C4A7FE /* RealmSwift */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		F8EF10792DABE398009DF0DC /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = F8EF10782DABE398009DF0DC /* FirebaseAnalytics */; };
 		F8EF107D2DABE694009DF0DC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F8EF107C2DABE694009DF0DC /* GoogleService-Info.plist */; };
+		F8EF10D32DADF82C009DF0DC /* FloatingButton in Frameworks */ = {isa = PBXBuildFile; productRef = F8EF10D22DADF82C009DF0DC /* FloatingButton */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -45,6 +46,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F8EF10D32DADF82C009DF0DC /* FloatingButton in Frameworks */,
 				F8EF10792DABE398009DF0DC /* FirebaseAnalytics in Frameworks */,
 				F8D23ACC2DA8D3B800C4A7FE /* RealmSwift in Frameworks */,
 			);
@@ -93,6 +95,7 @@
 			packageProductDependencies = (
 				F8D23ACB2DA8D3B800C4A7FE /* RealmSwift */,
 				F8EF10782DABE398009DF0DC /* FirebaseAnalytics */,
+				F8EF10D22DADF82C009DF0DC /* FloatingButton */,
 			);
 			productName = CashBookForKidsApp;
 			productReference = F81A6B072D9EC86800EA87AB /* CashBookForKidsApp.app */;
@@ -125,6 +128,7 @@
 			packageReferences = (
 				F8D23ACA2DA8D3B800C4A7FE /* XCRemoteSwiftPackageReference "realm-swift" */,
 				F8EF10772DABE398009DF0DC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				F8EF10D12DADF82C009DF0DC /* XCRemoteSwiftPackageReference "FloatingButton" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F81A6B082D9EC86800EA87AB /* Products */;
@@ -379,6 +383,14 @@
 				minimumVersion = 11.11.0;
 			};
 		};
+		F8EF10D12DADF82C009DF0DC /* XCRemoteSwiftPackageReference "FloatingButton" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/exyte/FloatingButton.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.4.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -391,6 +403,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F8EF10772DABE398009DF0DC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAnalytics;
+		};
+		F8EF10D22DADF82C009DF0DC /* FloatingButton */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F8EF10D12DADF82C009DF0DC /* XCRemoteSwiftPackageReference "FloatingButton" */;
+			productName = FloatingButton;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

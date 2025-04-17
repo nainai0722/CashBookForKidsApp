@@ -8,28 +8,33 @@
 import SwiftUI
 import RealmSwift
 import UniformTypeIdentifiers
+import FloatingButton
 
 struct MultiUserTabView: View {
     @State var isShowFullScreen: Bool = false
     @ObservedResults(User.self) var users
 
     var body: some View {
-        VStack {
-            TabView {
-                ForEach(users) { user in
-                    UserMoneyListView(user: user)
+        ZStack {
+            VStack {
+                TabView {
+                    ForEach(users) { user in
+                        UserMoneyListView(user: user)
+                            .tabItem {
+                                Text(user.name)
+                            }
+                    }
+                    SettingView()
                         .tabItem {
-                            Text(user.name)
+                            Text("設定")
                         }
                 }
-                SettingView()
-                    .tabItem {
-                        Text("設定")
-                    }
+                .fullScreenCover(isPresented: $isShowFullScreen) {
+                    RealmControl()
+                }
             }
-            .fullScreenCover(isPresented: $isShowFullScreen) {
-                RealmControl()
-            }
+            // ボタンを設置した・・・
+            ScreenStraight2()
         }
         .onAppear {
             isShowFullScreen = users.isEmpty ? true : false
@@ -40,6 +45,67 @@ struct MultiUserTabView: View {
 
 #Preview {
     MultiUserTabView()
+}
+
+struct ScreenStraight2: View {
+
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+
+    var body: some View {
+        let mainButton2 = MainButton(imageName: "cloud.fill", colorHex: "eb3b5a")
+        let buttonsImage = MockData.iconImageNames.enumerated().map { index, value in
+            IconButton(imageName: value, action: {
+                handleButtonTap(index: index)
+            }, color: MockData.colors[index])
+        }
+
+
+        let menu2 = FloatingButton(mainButtonView: mainButton2, buttons: buttonsImage)
+            .straight()
+            .direction(.top)
+            .delays(delayDelta: 0.1)
+
+        return VStack {
+            Spacer()
+            HStack {
+                Spacer()
+                menu2
+            }
+            .padding(20)
+        }
+    }
+    func handleButtonTap(index: Int) {
+        switch index {
+        case 0:
+            print("💡 ボタン0が押された！何かの登録処理など")
+        case 1:
+            print("📨 ボタン1が押された！メッセージ送信？")
+        case 2:
+            print("🔔 ボタン2が押された！通知を出す？")
+        default:
+            print("🤷‍♀️ 未定義のボタンが押された")
+        }
+    }
+}
+
+struct AnimatedButtonView: View {
+    @State private var isTapped = false
+
+    var body: some View {
+        Button(action: {
+            withAnimation(.easeInOut(duration: 0.3)) {
+                isTapped.toggle()
+            }
+        }) {
+            Text("Tap Me")
+                .font(.headline)
+                .foregroundColor(.white)
+                .padding()
+                .background(isTapped ? Color.blue : Color.green)
+                .cornerRadius(10)
+                .scaleEffect(isTapped ? 1.2 : 1.0)
+        }
+    }
 }
 
 struct UserMoneyListView: View {
@@ -62,7 +128,6 @@ struct UserMoneyListView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                Text(user.name)
                 Text(getSavingPlan())
                 //　ふやす減らすボタン
                 ButtonView(
@@ -100,6 +165,7 @@ struct UserMoneyListView: View {
                         deleteMoney(at: indexSet, for: user)
                     }
                 }
+                .listStyle(.plain)
                 .id(refreshID) // ←これ追加
             }
         }
@@ -135,6 +201,8 @@ struct UserMoneyListView: View {
         }
     }
     
+    /// 目標にしている金額を取得する
+    /// - Returns: 目標の金額
     func getSavingPlan() -> String {
         let savingPlan = user.savingPlans.where {$0.isAchieved == false}.first
         if let savingPlan = savingPlan {
@@ -525,6 +593,24 @@ struct ContentView2: View {
             ContentView()
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)
+        }
+    }
+}
+
+struct ContentView3: View {
+    var body: some View {
+        NavigationView {
+            List {
+                NavigationLink(destination: ScreenIconsAndText()) {
+                    Text("IconsAndText")
+                }
+                NavigationLink(destination: ScreenStraight()) {
+                    Text("Straight")
+                }
+                NavigationLink(destination: ScreenCircle()) {
+                    Text("Circle")
+                }
+            }
         }
     }
 }

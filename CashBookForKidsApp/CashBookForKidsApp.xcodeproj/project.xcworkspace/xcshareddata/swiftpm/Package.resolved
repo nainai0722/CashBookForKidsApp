@@ -1,5 +1,5 @@
 {
-  "originHash" : "76ddb97a015a5fe9832feeb0722ecb52da8f34a6d14a63f3abb855009a814073",
+  "originHash" : "58cfb94b65345b6390d932327077954f8c9ea3e0e1e96365aa04380483397c97",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -26,6 +26,15 @@
       "state" : {
         "revision" : "d1f7c7e8eaa74d7e44467184dc5f592268247d33",
         "version" : "11.11.0"
+      }
+    },
+    {
+      "identity" : "floatingbutton",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/exyte/FloatingButton.git",
+      "state" : {
+        "revision" : "c1e3e6a641ef5bacbcbc2b2c80db54793f75f974",
+        "version" : "1.4.0"
       }
     },
     {
