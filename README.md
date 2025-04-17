@@ -18,3 +18,24 @@
 - Firebase Firestore（クラウドデータベース）
 - RealmSwift（ローカルデータ保存）
 - Git / GitHub
+
+## セットアップ手順
+
+1. このリポジトリをクローン
+```bash
+git clone https://github.com/nainai0722/CashBookForKidsApp.git
+```
+2. Firebaseの設定
+Firebase Console で新しいプロジェクトを作成
+iOSアプリを追加し、GoogleService-Info.plist を取得
+取得した GoogleService-Info.plist をプロジェクトのルートに追加（例: YourMoneyApp/GoogleService-Info.plist）
+
+3. 必要なライブラリのインストール
+Xcodeでプロジェクトを開くと自動的にSwift Package Managerで必要なパッケージがインストールされます。
+※ パッケージの解決に時間がかかる場合があります。その際は「File > Packages > Resolve Package Versions」などで手動リフレッシュしてください。
+
+
+4.ビルド & 実行
+Xcode上でターゲットデバイスを選択し、Run（▶）ボタンでビルド＆実行します。
+
+
