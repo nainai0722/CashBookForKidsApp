@@ -12,12 +12,14 @@ import FloatingButton
 
 struct MultiUserTabView: View {
     @State var isShowFullScreen: Bool = false
+    @State var isShowInsertView: Bool = true
     @ObservedResults(User.self) var users
 
     var body: some View {
         ZStack {
             VStack {
                 TabView {
+//                    MoneyInsertView(isShowFullScreen: $isShowInsertView,user:users.first!)
                     ForEach(users) { user in
                         UserMoneyListView(user: user)
                             .tabItem {
@@ -169,23 +171,23 @@ struct UserMoneyListView: View {
                 .id(refreshID) // ←これ追加
             }
         }
-        .sheet(isPresented: $isShowingIncomeSheet) {
-            MoneyInputView(
-                isShowingSheet: $isShowingIncomeSheet,
+        .fullScreenCover(isPresented: $isShowingIncomeSheet) {
+            MoneyInsertView(
+                isShowFullScreen: $isShowingIncomeSheet,
                 editMoney: $editMoney, refreshID: $refreshID,
                 user: user,
                 moneyType: .income
             )
         }
-        .sheet(isPresented: $isShowingExpenseSheet) {
-            MoneyInputView(
-                isShowingSheet: $isShowingExpenseSheet,
+        .fullScreenCover(isPresented: $isShowingExpenseSheet) {
+            MoneyInsertView(
+                isShowFullScreen: $isShowingExpenseSheet,
                 editMoney: $editMoney, refreshID: $refreshID,
                 user: user,
                 moneyType: .expense
             )
         }
-        .sheet(isPresented: $isShowingTaraRevaCalculateSheet) {
+        .fullScreenCover(isPresented: $isShowingTaraRevaCalculateSheet) {
             TaraRevaCalculateView(
                 isShowingSheet: $isShowingTaraRevaCalculateSheet,
                 user: user

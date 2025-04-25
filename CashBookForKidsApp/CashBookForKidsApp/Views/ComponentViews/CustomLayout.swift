@@ -15,6 +15,13 @@ struct CustomLayout: View {
         }
         .modifier(CustomButtonLayout())
         
+        Button(action: {
+            
+        }){
+            Text("変更")
+                .modifier(CustomColorFontSizeButton(fontSize: 15, color: .blue))
+        }
+        
         Button(action:{}){
             Text("ふやす")
                 .modifier(CustomGreenButton(fontType: .headline))
@@ -23,6 +30,9 @@ struct CustomLayout: View {
         
         Text("色を変える")
             .modifier(CustomButtonLayoutWithSetColor(textColor: Color.white,backGroundColor: Color.green,fontType: .largeTitle))
+        
+        Text("Paypayっぽく")
+            .modifier(CustomButtonWithColorFont(textColor: .white, backGroundColor: .blue, fontSize: 20))
     }
 }
 #Preview {
@@ -43,6 +53,22 @@ struct CustomButtonLayout:ViewModifier {
     }
 }
 
+struct CustomButtonWithColorFont:ViewModifier {
+    var textColor: Color
+    var backGroundColor: Color
+    var fontSize: CGFloat
+    func body(content: Content) -> some View {
+        content
+            .frame(width: UIScreen.main.bounds.width * 0.9, height: 50)
+            .background(backGroundColor)
+            .foregroundColor(textColor)
+            .fontWeight(.bold)
+            .font(.system(size: fontSize))
+            .cornerRadius(6)
+            .padding()
+    }
+}
+
 struct CustomButtonLayoutWithSetColor:ViewModifier {
     var textColor: Color
     var backGroundColor: Color
@@ -54,7 +80,6 @@ struct CustomButtonLayoutWithSetColor:ViewModifier {
             .foregroundColor(textColor)
             .font(fontType)
             .cornerRadius(15)
-//            .shadow(radius: 5) // 影をつける
             .padding()
     }
 }
@@ -67,6 +92,20 @@ struct CustomGreenButton:ViewModifier {
             .background(.green)
             .foregroundColor(.white)
             .font(fontType)
+            .cornerRadius(7)
+            .padding()
+    }
+}
+
+struct CustomColorFontSizeButton:ViewModifier {
+    var fontSize: CGFloat
+    var color: Color
+    func body(content: Content) -> some View {
+        content
+            .padding(10)
+            .background(color)
+            .foregroundColor(.white)
+            .font(.system(size: fontSize))
             .cornerRadius(7)
             .padding()
     }

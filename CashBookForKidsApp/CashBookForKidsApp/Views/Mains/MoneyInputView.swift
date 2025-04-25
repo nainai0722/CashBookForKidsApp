@@ -15,7 +15,6 @@ struct MoneyInputView: View {
     @Binding var refreshID :UUID
     @ObservedResults(Money.self) var moneys
     @ObservedRealmObject var user: User
-//    var user: User
     
     @State var moneyType: MoneyType = .expense
     
@@ -290,31 +289,16 @@ struct MoneyInputView: View {
 
 import SwiftUI
 
-struct BorderedTextModifier: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .padding() // テキストの周りに余白を追加
-            .background(
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(Color.white)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.blue, lineWidth: 2) // 枠線を追加
-                    )
-            )
-    }
-}
-
 struct BorderedTextChangeColor: ViewModifier {
     var isSelected: Bool
     func body(content: Content) -> some View {
         content
-            .padding() // テキストの周りに余白を追加
+            .padding(10) // テキストの周りに余白を追加
             .background(
-                RoundedRectangle(cornerRadius: 10)
+                RoundedRectangle(cornerRadius: 6)
                     .fill(isSelected ? Color.blue : Color.white)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 10)
+                        RoundedRectangle(cornerRadius: 6)
                             .stroke(isSelected ? Color.white : Color.blue, lineWidth: 2)
                     )
             )
@@ -354,27 +338,6 @@ struct selectDateView: View {
     }
 }
 
-struct InputPriceView: View {
-    @Binding var inputPrice: String
-    var body: some View {
-        VStack {
-            HStack(spacing:0) {
-                TextField("金額を入力", text: $inputPrice)
-                    .keyboardType(.numberPad)
-                    .multilineTextAlignment(.trailing) // テキスト入力も左寄せ
-                    .font(.system(size: 30))
-                    .padding(.trailing, 30)
-                Text("円")
-            }
-            .padding(.horizontal)
-            Rectangle()
-                .frame(height: 1) // 線の太さ
-                .foregroundColor(.blue) // 線の色
-                .padding(.horizontal)
-        }
-        .padding()
-    }
-}
 
 struct InputMemoView: View {
     @Binding var inputMemo: String
@@ -386,11 +349,19 @@ struct InputMemoView: View {
                     .multilineTextAlignment(.trailing) // テキスト入力も左寄せ
                     .font(.system(size: 30))
                     .padding(.trailing, 45)
+                Button(action: {
+                        inputMemo = ""
+                }){
+                    Image(systemName: "xmark.circle.fill")
+                        .padding(.leading, 10)
+                        .foregroundStyle(.gray)
+                }
+                .opacity(inputMemo.isEmpty ? 0 : 1)
             }
             .padding(.horizontal)
             Rectangle()
-                .frame(height: 1) // 線の太さ
-                .foregroundColor(.blue) // 線の色
+                .frame(height: 1)
+                .foregroundColor(inputMemo.isEmpty ? .gray : .blue)
                 .padding(.horizontal)
         }
         .padding()
@@ -451,7 +422,6 @@ struct InputTitleView: View {
                 Image(systemName: "xmark")
                     .padding()
             }
-            
         }
     }
 }
