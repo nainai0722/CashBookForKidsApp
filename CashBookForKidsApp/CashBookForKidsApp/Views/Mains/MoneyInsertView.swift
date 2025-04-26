@@ -12,76 +12,7 @@ import FirebaseAnalytics
 #Preview("Loading") {
     SelectIncomeMoneyButtonListView(inputPrice: .constant("100"))
     InputPriceView(inputPrice: .constant(""))
-//    InputPriceView2(inputPrice: "")
 }
-
-struct InputPriceView: View {
-    @Binding var inputPrice: String
-    var body: some View {
-        VStack {
-            HStack(spacing:0) {
-                TextField("金額を入力", text: $inputPrice)
-                    .keyboardType(.numberPad)
-                    .multilineTextAlignment(.trailing) // テキスト入力も左寄せ
-                    .font(.system(size: 30))
-                    .padding(.trailing, 20)
-                Text("円")
-                Button(action: {
-                        inputPrice = ""
-                }){
-                    Image(systemName: "xmark.circle.fill")
-                        .padding(.leading, 10)
-                        .foregroundStyle(.gray)
-                }
-                .opacity(inputPrice.isEmpty ? 0 : 1)
-            }
-            .padding(.horizontal)
-            Rectangle()
-                .frame(height: 1)
-                .foregroundStyle(inputPrice.isEmpty ? Color.gray : Color.blue)
-                .padding(.horizontal)
-        }
-        .padding()
-    }
-}
-
-
-struct SelectIncomeMoneyButtonListView: View {
-    @Binding var inputPrice: String
-    let moneyBottonContents : [Int] = [100,200,400,300,500,700,1000]
-    var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 10) {
-                ForEach(moneyBottonContents, id: \.self) { content in
-                    Button(action: {
-                        if let inputPriceInt = Int(inputPrice.isEmpty ? "0" : inputPrice) {
-                            inputPrice = String(inputPriceInt + content)
-                        }
-                    } ) {
-                        Text("+\(content)円")
-                            .modifier(BorderedTextModifier())
-                    }
-                }
-            }
-        }
-    }
-}
-
-struct BorderedTextModifier: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .padding(10)
-            .background(
-                RoundedRectangle(cornerRadius: 6)
-                    .fill(Color.white)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 6)
-                            .stroke(Color.blue, lineWidth: 2) // 枠線を追加
-                    )
-            )
-    }
-}
-
 
 struct MoneyInsertView: View {
     @Binding var isShowFullScreen: Bool
@@ -368,13 +299,60 @@ struct MoneyInsertView: View {
             }
         }
     }
-    
 }
 
-#Preview {
-//    MoneyInsertView(isShowFullScreen: .constant(false), user: User())
+
+struct InputPriceView: View {
+    @Binding var inputPrice: String
+    var body: some View {
+        VStack {
+            HStack(spacing:0) {
+                TextField("金額を入力", text: $inputPrice)
+                    .keyboardType(.numberPad)
+                    .multilineTextAlignment(.trailing) // テキスト入力も左寄せ
+                    .font(.system(size: 30))
+                    .padding(.trailing, 20)
+                Text("円")
+                Button(action: {
+                        inputPrice = ""
+                }){
+                    Image(systemName: "xmark.circle.fill")
+                        .padding(.leading, 10)
+                        .foregroundStyle(.gray)
+                }
+                .opacity(inputPrice.isEmpty ? 0 : 1)
+            }
+            .padding(.horizontal)
+            Rectangle()
+                .frame(height: 1)
+                .foregroundStyle(inputPrice.isEmpty ? Color.gray : Color.blue)
+                .padding(.horizontal)
+        }
+        .padding()
+    }
 }
 
+
+struct SelectIncomeMoneyButtonListView: View {
+    @Binding var inputPrice: String
+    let moneyBottonContents : [Int] = [100,200,400,300,500,700,1000]
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 10) {
+                ForEach(moneyBottonContents, id: \.self) { content in
+                    Button(action: {
+                        if let inputPriceInt = Int(inputPrice.isEmpty ? "0" : inputPrice) {
+                            inputPrice = String(inputPriceInt + content)
+                        }
+                    } ) {
+                        Text("+\(content)円")
+                            .modifier(BorderedTextModifier())
+                    }
+                }
+            }
+        }
+    }
+}
 
 struct CategoryButtonList:View {
     let moneyType:MoneyType

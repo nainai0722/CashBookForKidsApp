@@ -39,6 +39,37 @@ struct CustomLayout: View {
     CustomLayout()
 }
 
+struct BorderedTextChangeColor: ViewModifier {
+    var isSelected: Bool
+    func body(content: Content) -> some View {
+        content
+            .padding(10) // テキストの周りに余白を追加
+            .background(
+                RoundedRectangle(cornerRadius: 6)
+                    .fill(isSelected ? Color.blue : Color.white)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 6)
+                            .stroke(isSelected ? Color.white : Color.blue, lineWidth: 2)
+                    )
+            )
+    }
+}
+
+struct BorderedTextModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .padding(10)
+            .background(
+                RoundedRectangle(cornerRadius: 6)
+                    .fill(Color.white)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 6)
+                            .stroke(Color.blue, lineWidth: 2) // 枠線を追加
+                    )
+            )
+    }
+}
+
 struct CustomButtonLayout:ViewModifier {
     func body(content: Content) -> some View {
         content

@@ -289,22 +289,6 @@ struct MoneyInputView: View {
 
 import SwiftUI
 
-struct BorderedTextChangeColor: ViewModifier {
-    var isSelected: Bool
-    func body(content: Content) -> some View {
-        content
-            .padding(10) // テキストの周りに余白を追加
-            .background(
-                RoundedRectangle(cornerRadius: 6)
-                    .fill(isSelected ? Color.blue : Color.white)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 6)
-                            .stroke(isSelected ? Color.white : Color.blue, lineWidth: 2)
-                    )
-            )
-    }
-}
-
 // 日付を変更する画面
 struct selectDateView: View {
     @Binding var selectedDate: Date
