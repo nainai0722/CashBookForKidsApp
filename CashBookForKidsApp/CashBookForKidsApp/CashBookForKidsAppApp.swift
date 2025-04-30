@@ -28,11 +28,12 @@ struct CashBookForKidsAppApp: SwiftUI.App {
     
     func initRealm() {
         let config = Realm.Configuration(
-            schemaVersion: 2, // ← 今のバージョン +1 にする（例）
+            schemaVersion: 3, // ← 今のバージョン +1 にする（例）
             migrationBlock: { migration, oldSchemaVersion in
-                if oldSchemaVersion < 2 {
-                    // 今回の変更では特に何もする必要はない
-                    // Realmが自動的に新しい List プロパティを追加してくれる
+                if oldSchemaVersion < 3 {
+                    migration.enumerateObjects(ofType: Money.className()) { _, newObject in
+                        newObject!["userID"] = ""
+                    }
                 }
             }
         )

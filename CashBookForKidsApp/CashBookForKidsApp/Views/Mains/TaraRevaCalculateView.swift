@@ -149,7 +149,7 @@ struct TaraRevaCalculateView: View {
             let users = realm.objects(User.self)
             let userToUpdate = users.filter { $0.id == user.id }.first!
             
-            let newItem = Money(price: priceValue, moneyType: moneyType, incomeType: selectedIncomeType, memo: inputMemo, timestamp: Date())
+            let newItem = Money(price: priceValue, moneyType: moneyType, incomeType: selectedIncomeType, memo: inputMemo, timestamp: Date(), userID: user.id)
             
             try! realm.write {
                 userToUpdate.moneys.append(newItem)
@@ -177,7 +177,7 @@ struct TaraRevaCalculateView: View {
             let users = realm.objects(User.self)
             let userToUpdate = users.filter { $0.id == user.id }.first!
             
-            let newItem = Money(price: priceValue, moneyType: moneyType, expenseType: selectedExpenseType, memo: inputMemo, timestamp: Date())
+            let newItem = Money(price: priceValue, moneyType: moneyType, expenseType: selectedExpenseType, memo: inputMemo, timestamp: Date(), userID: user.id)
             
             try! realm.write {
                 userToUpdate.moneys.append(newItem)

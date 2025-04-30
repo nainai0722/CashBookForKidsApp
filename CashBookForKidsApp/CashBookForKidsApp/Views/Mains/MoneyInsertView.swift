@@ -9,6 +9,10 @@ import SwiftUI
 import RealmSwift
 import FirebaseAnalytics
 
+#Preview {
+    MoneyInsertView(isShowFullScreen: .constant(true),editMoney: .constant(MoneyData()), user: User())
+}
+
 #Preview("Loading") {
     SelectIncomeMoneyButtonListView(inputPrice: .constant("100"))
     InputPriceView(inputPrice: .constant(""))
@@ -17,7 +21,7 @@ import FirebaseAnalytics
 struct MoneyInsertView: View {
     @Binding var isShowFullScreen: Bool
     @Binding var editMoney: MoneyData?
-    @Binding var refreshID :UUID
+//    @Binding var refreshID :UUID
     @ObservedResults(Money.self) var moneys
     @ObservedRealmObject var user: User
     
@@ -160,14 +164,14 @@ struct MoneyInsertView: View {
             let users = realm.objects(User.self)
             let userToUpdate = users.filter { $0.id == user.id }.first!
             
-            let newItem = Money(price: priceValue, moneyType: moneyType, incomeType: selectedIncomeType, memo: inputMemo, timestamp: selectedDate)
+            let newItem = Money(price: priceValue, moneyType: moneyType, incomeType: selectedIncomeType, memo: inputMemo, timestamp: selectedDate, userID: userToUpdate.id)
             
             try! realm.write {
                 userToUpdate.moneys.append(newItem)
             }
             
             selectedIncomeType = nil
-            refreshID = UUID()
+//            refreshID = UUID()
             print("おこづかいを追加する")
             
             Analytics.setAnalyticsCollectionEnabled(true)
@@ -189,14 +193,14 @@ struct MoneyInsertView: View {
             let users = realm.objects(User.self)
             let userToUpdate = users.filter { $0.id == user.id }.first!
             
-            let newItem = Money(price: priceValue, moneyType: moneyType, expenseType: selectedExpenseType, memo: inputMemo, timestamp: selectedDate)
+            let newItem = Money(price: priceValue, moneyType: moneyType, expenseType: selectedExpenseType, memo: inputMemo, timestamp: selectedDate, userID: userToUpdate.id)
             
             try! realm.write {
                 userToUpdate.moneys.append(newItem)
             }
 
             selectedExpenseType = nil
-            refreshID = UUID()
+//            refreshID = UUID()
             print("何に使ったか")
             Analytics.logEvent("add_allowance", parameters: [
                     "price": priceValue,
@@ -234,7 +238,7 @@ struct MoneyInsertView: View {
                             "memo": inputMemo,
                             "incomeType": selectedIncomeType?.rawValue ?? "値が取れませんでした"
                     ])
-                    refreshID = UUID()
+//                    refreshID = UUID()
                 }
             } else {
                 print("thawに失敗しました（オブジェクトが無効になっている可能性あり）")
@@ -292,10 +296,11 @@ struct MoneyInsertView: View {
             let users = realm.objects(User.self)
             let userToUpdate = users.filter { $0.id == user.id }.first!
             
-            let newItem = Money(price: 100, moneyType: .income, incomeType: .familySupport, memo: "メモメモ", timestamp: date)
+            let newItem = Money(price: 100, moneyType: .income, incomeType: .familySupport, memo: "メモメモ", timestamp: date, userID: userToUpdate.id)
             
             try! realm.write {
                 userToUpdate.moneys.append(newItem)
+//                refreshID = UUID()
             }
         }
     }

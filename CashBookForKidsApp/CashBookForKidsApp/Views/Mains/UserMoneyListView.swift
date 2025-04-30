@@ -189,7 +189,10 @@ struct UserMoneyListView: View {
 
         try! realm.write {
             for index in offsets {
-                let moneyToDelete = thawedUser.moneys[index]
+                
+                let sortedMoneys = thawedUser.moneys.sorted { $0.timestamp > $1.timestamp }
+                
+                let moneyToDelete = sortedMoneys[index]
                 realm.delete(moneyToDelete)
             }
         }

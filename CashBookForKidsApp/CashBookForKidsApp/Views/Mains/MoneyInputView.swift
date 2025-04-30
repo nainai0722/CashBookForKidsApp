@@ -9,6 +9,10 @@ import SwiftUI
 import RealmSwift
 import FirebaseAnalytics
 
+#Preview {
+    MoneyInputView(isShowingSheet: .constant(true),editMoney: .constant(MoneyData()), refreshID: .constant(UUID()), user: User())
+}
+
 struct MoneyInputView: View {
     @Binding var isShowingSheet: Bool
     @Binding var editMoney: MoneyData?
@@ -141,7 +145,7 @@ struct MoneyInputView: View {
             let users = realm.objects(User.self)
             let userToUpdate = users.filter { $0.id == user.id }.first!
             
-            let newItem = Money(price: priceValue, moneyType: moneyType, incomeType: selectedIncomeType, memo: inputMemo, timestamp: selectedDate)
+            let newItem = Money(price: priceValue, moneyType: moneyType, incomeType: selectedIncomeType, memo: inputMemo, timestamp: selectedDate,userID: user.id)
             
             try! realm.write {
                 userToUpdate.moneys.append(newItem)
@@ -170,7 +174,7 @@ struct MoneyInputView: View {
             let users = realm.objects(User.self)
             let userToUpdate = users.filter { $0.id == user.id }.first!
             
-            let newItem = Money(price: priceValue, moneyType: moneyType, expenseType: selectedExpenseType, memo: inputMemo, timestamp: selectedDate)
+            let newItem = Money(price: priceValue, moneyType: moneyType, expenseType: selectedExpenseType, memo: inputMemo, timestamp: selectedDate, userID: user.id)
             
             try! realm.write {
                 userToUpdate.moneys.append(newItem)
@@ -273,7 +277,7 @@ struct MoneyInputView: View {
             let users = realm.objects(User.self)
             let userToUpdate = users.filter { $0.id == user.id }.first!
             
-            let newItem = Money(price: 100, moneyType: .income, incomeType: .familySupport, memo: "メモメモ", timestamp: date)
+            let newItem = Money(price: 100, moneyType: .income, incomeType: .familySupport, memo: "メモメモ", timestamp: date, userID: user.id)
             
             try! realm.write {
                 userToUpdate.moneys.append(newItem)
@@ -283,9 +287,6 @@ struct MoneyInputView: View {
     
 }
 
-#Preview {
-    MoneyInputView(isShowingSheet: .constant(true),editMoney: .constant(MoneyData()), refreshID: .constant(UUID()), user: User())
-}
 
 import SwiftUI
 

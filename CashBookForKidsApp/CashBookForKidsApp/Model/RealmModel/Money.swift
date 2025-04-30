@@ -19,12 +19,14 @@ class Money: Object, ObjectKeyIdentifiable {
     
     @Persisted(originProperty: "moneys") var owner: LinkingObjects<User>
 
+    @Persisted var userID: String
+    
     // サーバ同期用
     @Persisted var isSynced: Bool = false
     @Persisted var createdAt: Date = Date()
     @Persisted var updatedAt: Date = Date()
     
-    convenience init(id:String = UUID().uuidString, price: Int, moneyType: MoneyType, incomeType: IncomeType? = nil, expenseType: ExpenseType? = nil, memo: String? = nil, timestamp: Date) {
+    convenience init(id:String = UUID().uuidString, price: Int, moneyType: MoneyType, incomeType: IncomeType? = nil, expenseType: ExpenseType? = nil, memo: String? = nil, timestamp: Date, userID: String) {
         self.init()
         self.id = id
         self.price = price
@@ -33,6 +35,7 @@ class Money: Object, ObjectKeyIdentifiable {
         self.expenseType = expenseType
         self.memo = memo
         self.timestamp = timestamp
+        self.userID = userID
     }
     
     override init() {
