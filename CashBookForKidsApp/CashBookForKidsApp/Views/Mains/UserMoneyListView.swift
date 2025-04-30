@@ -8,8 +8,17 @@
 import SwiftUI
 import RealmSwift
 
-#Preview("モックたろう") {
-    UserMoneyListView(user: addUser("モックたろう"))
+//#Preview("モックたろう") {
+//    UserMoneyListView(user: mockUser())
+//}
+
+func mockUser() -> User {
+    let user = addUser("モックたろう")
+    let moneys = [Money(price: 200, moneyType: .income, timestamp: Date(), userID: user.id)]
+    let moneyList = List<Money>()
+    moneyList.append(objectsIn: moneys)
+    user.moneys = moneyList
+    return user
 }
 
 #Preview("テストユーザー") {
@@ -33,10 +42,14 @@ struct UserMoneyListView: View {
     
     @State private var refreshID = UUID()
     
+    // アニメーション用
+    @State private var appearedItems: Set<String> = []
+    
     var body: some View {
         NavigationStack {
             VStack {
-                Text(getSavingPlan())
+//                このSavingPlanをどこかで使えるようにしたい。
+//                Text(getSavingPlan())
                 //　ふやす減らすボタン
                 ButtonView(
                     editMoney: $editMoney,
@@ -58,7 +71,8 @@ struct UserMoneyListView: View {
                 }
                 
                 List {
-                    ForEach(user.moneys) { money in
+                    let sortedMoneys = Array(user.moneys).sorted(by: { $0.timestamp > $1.timestamp})
+                    ForEach(sortedMoneys) { money in
                         MoneyInfoCell(money: castMoneyData(to: money))
                             .onTapGesture {
                                 editMoney = castMoneyData(to: money)
@@ -68,19 +82,39 @@ struct UserMoneyListView: View {
                                     isShowingIncomeSheet.toggle()
                                 }
                             }
+                            .offset(y: appearedItems.contains(money.id) ? 0 : -100)
+                            .opacity(appearedItems.contains(money.id) ? 1 : 0)
+                            .animation(.easeOut(duration: 0.4).delay(Double(user.moneys.firstIndex(where: { $0.id == money.id }) ?? 0) * 0.1), value: appearedItems)
                     }
                     .onDelete { indexSet in
                         deleteMoney(at: indexSet, for: user)
                     }
                 }
                 .listStyle(.plain)
-                .id(refreshID) // ←これ追加
+                .onAppear {
+                    let moneysArray = Array(user.moneys) // これ！
+                    for (index, money) in moneysArray.enumerated() {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + Double(index) * 0.1) {
+                            appearedItems.insert(money.id)
+                        }
+                    }
+                }
+                .onChange(of: user.moneys.count) { _ in
+                    refreshID = UUID()
+                    let moneysArray = Array(user.moneys)
+                    appearedItems = []
+                    for (index, money) in moneysArray.enumerated() {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + Double(index) * 0.1) {
+                            appearedItems.insert(money.id)
+                        }
+                    }
+                }
             }
         }
         .fullScreenCover(isPresented: $isShowingIncomeSheet) {
             MoneyInsertView(
                 isShowFullScreen: $isShowingIncomeSheet,
-                editMoney: $editMoney, refreshID: $refreshID,
+                editMoney: $editMoney,
                 user: user,
                 moneyType: .income
             )
@@ -88,7 +122,7 @@ struct UserMoneyListView: View {
         .fullScreenCover(isPresented: $isShowingExpenseSheet) {
             MoneyInsertView(
                 isShowFullScreen: $isShowingExpenseSheet,
-                editMoney: $editMoney, refreshID: $refreshID,
+                editMoney: $editMoney,
                 user: user,
                 moneyType: .expense
             )

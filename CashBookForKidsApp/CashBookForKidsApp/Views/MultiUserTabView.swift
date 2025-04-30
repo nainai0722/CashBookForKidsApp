@@ -14,9 +14,14 @@ struct MultiUserTabView: View {
     @State var isShowFullScreen: Bool = false
     @State var isShowInsertView: Bool = true
     @ObservedResults(User.self) var users
-
+    
+    // ダークモード判定
+    @Environment(\.colorScheme) var colorScheme
     var body: some View {
         ZStack {
+            if colorScheme == .dark {
+                let _ = print("ダークモード")
+            }
             VStack {
                 TabView {
                     ForEach(users) { user in
@@ -40,6 +45,7 @@ struct MultiUserTabView: View {
         .onAppear {
             isShowFullScreen = users.isEmpty ? true : false
         }
+        .background(colorScheme == .dark ? .white: Color.white)
     }
 }
 
@@ -142,6 +148,7 @@ func addUser(_ name: String) -> User{
 }
 
 struct ButtonView: View {
+    @State private var showTitle: Bool = false
     @Binding var editMoney: MoneyData?
     @Binding var isShowingIncomeSheet: Bool
     @Binding var isShowingExpenseSheet: Bool
@@ -155,6 +162,12 @@ struct ButtonView: View {
                 Text("ふやす")
                     .modifier(CustomGreenButton(fontType: .headline))
             }
+            .offset(x: showTitle ? 0 : -UIScreen.main.bounds.width)
+            .animation(.easeOut(duration: 1.0), value: showTitle)
+            .onAppear {
+                showTitle = true
+            }
+            
             Button(action: {
                 editMoney = nil
                 isShowingExpenseSheet.toggle()
@@ -162,12 +175,23 @@ struct ButtonView: View {
                 Text("へらす")
                     .modifier(CustomGreenButton(fontType: .headline))
             }
+            .offset(y: showTitle ? 0 : -UIScreen.main.bounds.height)
+            .animation(.easeOut(duration: 1.0), value: showTitle)
+            .onAppear {
+                showTitle = true
+            }
+            
             Button(action: {
                 editMoney = nil
                 isShowingTaraRevaCalculateSheet.toggle()
             }){
                 Text("たられば計算")
                     .modifier(CustomGreenButton(fontType: .headline))
+            }
+            .offset(x: showTitle ? 0 : UIScreen.main.bounds.width)
+            .animation(.easeOut(duration: 1.0), value: showTitle)
+            .onAppear {
+                showTitle = true
             }
         }
     }

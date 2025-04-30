@@ -9,11 +9,17 @@ import SwiftUI
 import RealmSwift
 
 struct MoneySummaryComponent: View {
+    @State private var showSummary: Bool = false
     @Binding var isShowingGoalSetting: Bool
     @Binding var isShowingMoneyDetail: Bool
     @Binding var total: Int
     @Binding var goal: GoalData
     
+    @State private var wiggle = false
+    
+    @State private var isWiggling = false
+    
+    @Environment(\.colorScheme) var colorScheme
     
     var isGoalAchieved: Bool {
         return goal.amount > total
@@ -28,32 +34,32 @@ struct MoneySummaryComponent: View {
     
     var body: some View {
         ZStack {
-            Rectangle().fill(Color.green)
+            Rectangle()
+                .customGreen()
                 .cornerRadius(20)
             
             VStack(alignment:.leading) {
                 HStack {
                     Spacer()
-                    Button("Show Popover") {
-                        isShowingGoalSetting = true
-                    }
-                    .popover(isPresented: $isShowingGoalSetting) {
-                        Text(goalAchieved())
-                            .padding()
-                            .foregroundStyle(.background)
-                            .presentationBackground(.orange)
-                            .presentationCompactAdaptation(.popover)
-                    }
+//                    Button("Show Popover") {
+//                        isShowingGoalSetting = true
+//                    }
+//                    .popover(isPresented: $isShowingGoalSetting) {
+//                        Text(goalAchieved())
+//                            .padding()
+//                            .foregroundStyle(.background)
+//                            .presentationBackground(.orange)
+//                            .presentationCompactAdaptation(.popover)
+//                    }
                     
-                    Button(action:{
-                        isShowingGoalSetting = true
-                        isShowingMoneyDetail = false
-                        print("isShowingGoalSetting: \(isShowingGoalSetting)")
-                    }){
-                        
-                        BubbleView(text: goalAchieved())
-                            .foregroundStyle(.green)
-                    }
+//                    Button(action:{
+//                        isShowingGoalSetting = true
+//                        isShowingMoneyDetail = false
+//                        print("isShowingGoalSetting: \(isShowingGoalSetting)")
+//                    }){
+//                        BubbleView(text: goalAchieved())
+//                            .foregroundStyle(.green)
+//                    }
                 }
                 HStack {
                     Text("おこづかい")
@@ -64,6 +70,9 @@ struct MoneySummaryComponent: View {
                                 .foregroundStyle(.background)
                                 .presentationBackground(.orange)
                                 .presentationCompactAdaptation(.popover)
+                                .onTapGesture {
+                                    isShowingGoalSetting = true
+                                }
                         }
                     Spacer()
                     Text(currentDateString + "現在")
@@ -94,6 +103,14 @@ struct MoneySummaryComponent: View {
                             Text("こまかく見る")
                         }
                         .padding([.bottom,.trailing],10)
+                        .wiggle(wiggle: wiggle)
+                        .onAppear {
+                            wiggle = true
+                            // 一定時間で止める（例：2秒後）
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                                wiggle = false
+                            }
+                        }
                     }
                 }
             }
@@ -101,6 +118,11 @@ struct MoneySummaryComponent: View {
         .frame(height: 200)
         .padding(20)
         .padding(.bottom, 0)
+        .opacity(showSummary ? 1 : 0)
+        .animation(.bouncy(duration: 5.0), value: showSummary)
+        .onAppear {
+            showSummary = true
+        }
     }
     
     var currentDateString:String{
@@ -124,6 +146,8 @@ struct MoneySummaryComponent_Test: View {
     @Binding var total: Int
     @Binding var goal: GoalData
     
+    @Environment(\.colorScheme) var colorScheme
+    
     var isGoalAchieved: Bool {
         return goal.amount > total
     }
@@ -137,7 +161,8 @@ struct MoneySummaryComponent_Test: View {
     
     var body: some View {
         ZStack {
-            Rectangle().fill(Color.green)
+            Rectangle()
+                .customGreen()
                 .cornerRadius(20)
             
         }

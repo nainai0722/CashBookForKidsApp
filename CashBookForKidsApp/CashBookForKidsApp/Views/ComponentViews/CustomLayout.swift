@@ -39,6 +39,41 @@ struct CustomLayout: View {
     CustomLayout()
 }
 
+struct WiggleView: ViewModifier {
+    var wiggle: Bool
+    func body(content: Content) -> some View {
+        content
+            .rotationEffect(.degrees(wiggle ? 2 : -2))
+            .animation(wiggle ? .easeInOut(duration: 0.1).repeatForever(autoreverses: true) : .default, value: wiggle)
+    }
+}
+
+struct CustomGreen: ViewModifier {
+    @Environment(\.colorScheme) var colorScheme
+
+    func body(content: Content) -> some View {
+        content
+            .foregroundStyle(Color.dynamic(light: .green, dark: .green.opacity(0.4)))
+    }
+}
+
+struct CustomBackGroundGreen: ViewModifier {
+    @Environment(\.colorScheme) var colorScheme
+
+    func body(content: Content) -> some View {
+        content
+            .background(Color.dynamic(light: .green, dark: .green.opacity(0.4)))
+    }
+}
+
+
+/*
+ .rotation3DEffect(
+     .degrees(isWiggle ? 36 : 0),
+     axis: (x: 0, y: 1, z: 0)
+ )
+ */
+
 struct BorderedTextChangeColor: ViewModifier {
     var isSelected: Bool
     func body(content: Content) -> some View {
@@ -120,7 +155,7 @@ struct CustomGreenButton:ViewModifier {
     func body(content: Content) -> some View {
         content
             .frame(width: 100, height: 35)
-            .background(.green)
+            .customBackGroundGreen()
             .foregroundColor(.white)
             .font(fontType)
             .cornerRadius(7)
@@ -142,12 +177,25 @@ struct CustomColorFontSizeButton:ViewModifier {
     }
 }
 
+
+
 extension View {
     func hideKeyboardOnTap() -> some View {
         self.onTapGesture {
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder),
                                             to: nil, from: nil, for: nil)
         }
+    }
+    func wiggle(wiggle: Bool) -> some View {
+        self.modifier(WiggleView(wiggle: wiggle))
+    }
+    
+    func customGreen() -> some View {
+        self.modifier(CustomGreen())
+    }
+    
+    func customBackGroundGreen() -> some View {
+        self.modifier(CustomBackGroundGreen())
     }
 }
 
