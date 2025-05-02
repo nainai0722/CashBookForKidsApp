@@ -104,7 +104,7 @@ struct MoneyInputView: View {
                                      dismissButton: .default(Text("閉じる")))
                 }
                 
-                InputMemoView(inputMemo: $inputMemo)
+                InputTextView(inputMemo: $inputMemo, placeholder: "メモを入力")
                 
                 Button(action: {
                     isShowCalendar.toggle()
@@ -324,12 +324,13 @@ struct selectDateView: View {
 }
 
 
-struct InputMemoView: View {
+struct InputTextView: View {
     @Binding var inputMemo: String
+    let placeholder: String
     var body: some View {
         VStack {
             HStack(spacing:0) {
-                TextField("メモを入力", text: $inputMemo)
+                TextField(placeholder, text: $inputMemo)
                     .keyboardType(.default)
                     .multilineTextAlignment(.trailing) // テキスト入力も左寄せ
                     .font(.system(size: 30))

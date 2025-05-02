@@ -10,26 +10,73 @@ import RealmSwift
 import FloatingButton
 
 struct SettingView: View {
+    var body: some View {
+        NavigationStack {
+//            Text("ユーザー情報を変更する")
+            
+            ZStack(alignment: .bottomTrailing) {
+                List {
+                    NavigationLink {
+                        UserListView()
+                    } label: {
+                        Image(systemName: "person.circle.fill")
+                            .foregroundStyle(.green)
+                        Text("ユーザー一覧を見る")
+                    }
+                    NavigationLink {
+                        AppInfoView(title: "アプリ情報")
+                    } label: {
+                        Image(systemName: "info.circle.fill")
+                            .foregroundStyle(.yellow)
+                        Text("アプリ情報を見る")
+                    }
+                }
+                .listStyle(.plain)
+            }
+        }
+    }
+}
+
+
+struct UserListView: View {
     @ObservedResults(User.self) var users
     @State private var path = NavigationPath()
     @State var isAddUserView: Bool = false
     var body: some View {
         NavigationStack {
-            Text("ユーザー情報を変更する")
-            
+            HStack {
+                Spacer()
+                NavigationLink(
+                            destination: AddUserView(),
+                            label: { EmptyView() }
+                        )
+            }
             ZStack(alignment: .bottomTrailing) {
                 List(users) { user in
                     NavigationLink {
-                        EditUserView(user: user, userData: castUserData(user))
+                        EditUserView(user: user)
                     } label: {
                         Text(user.name)
                     }
                 }
                 .listStyle(.plain)
 
-                UserAddButton(isAddUserView: $isAddUserView)
-                    .padding(.bottom, 20)
-                    .padding(.trailing, 20)
+//                UserAddButton(isAddUserView: $isAddUserView)
+//                    .padding(.bottom, 20)
+//                    .padding(.trailing, 20)
+                Button(action: {
+                    self.isAddUserView.toggle()
+                }) {
+                    VStack {
+                        Image(systemName: "plus.circle.fill")
+                            .foregroundColor(.blue)
+                            .font(.system(size: 60))
+        
+                        Text("ユーザー追加")
+                            
+                    }.padding(.bottom, 40)
+                        .padding(.trailing, 40)
+                }
             }
 
             NavigationLink(
@@ -39,6 +86,7 @@ struct SettingView: View {
                     )
             
         }
+        .navigationTitle("ユーザー情報を変更する")
     }
     
     func castUserData(_ user: User) -> UserData {
@@ -46,6 +94,7 @@ struct SettingView: View {
         
     }
 }
+
 #Preview {
     SettingView()
 }
@@ -355,21 +404,42 @@ struct EditUserView: View {
     @Environment(\.dismiss) var dismiss
     
     @ObservedRealmObject var user: User
-    @State var userData: UserData
+    @State var userName: String = ""
     @State private var showAlert = false
     var body: some View {
-        VStack {
-            Text(user.name)
-            TextField("名前を入力", text: $userData.name)
-                .textFieldStyle(.roundedBorder)
-                .textCase(.lowercase)
-                .multilineTextAlignment(.trailing)
-            Button("更新") {
+        VStack(spacing: 24) {
+            Text("ユーザー情報の編集")
+                .font(.title2)
+                .bold()
+                .padding(.top)
+
+            // 名前入力フィールド（InputMemoView風の見た目）
+            InputTextView(inputMemo: $userName,placeholder: "名前を入力")
+                .padding(.horizontal)
+
+            // 更新ボタン
+            Button(action: {
                 updateUser(user)
                 dismiss()
+            }) {
+                Text("更新")
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(12)
             }
-            Button("削除") {
+
+            // 削除ボタン
+            Button(role: .destructive) {
                 showAlert = true
+            } label: {
+                Text("ユーザーを削除")
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.red.opacity(0.1))
+                    .foregroundColor(.red)
+                    .cornerRadius(12)
             }
             .alert("ユーザーを削除しますか？", isPresented: $showAlert) {
                 Button("削除", role: .destructive) {
@@ -378,8 +448,15 @@ struct EditUserView: View {
                 }
                 Button("キャンセル", role: .cancel) {}
             }
+
+            Spacer()
         }
+        .onAppear() {
+            userName = user.name
+        }
+        .padding()
     }
+    
 
     func updateUser(_ user: User) {
         let realm = try! Realm()
@@ -388,7 +465,7 @@ struct EditUserView: View {
         let userToUpdate = users.filter { $0.id == user.id }.first!
         
         try! realm.write {
-            userToUpdate.name = userData.name
+            userToUpdate.name = userName
         }
     }
     
@@ -408,16 +485,32 @@ struct AddUserView: View {
     @Environment(\.dismiss) var dismiss
     @State var newUSerName: String = ""
     var body: some View {
-        VStack {
+        VStack(spacing: 24)  {
             Text("新規ユーザー")
-            TextField("名前を入力", text: $newUSerName)
-                .textFieldStyle(.roundedBorder)
-                .textCase(.lowercase)
-                .multilineTextAlignment(.trailing)
-            Button("追加") {
+                .font(.title2)
+                .bold()
+                .padding(.top)
+//            TextField("名前を入力", text: $newUSerName)
+//                .textFieldStyle(.roundedBorder)
+//                .textCase(.lowercase)
+//                .multilineTextAlignment(.trailing)
+            
+            // 名前入力フィールド（InputMemoView風の見た目）
+            InputTextView(inputMemo: $newUSerName,placeholder: "名前を入力")
+                .padding(.horizontal)
+            
+            Button(action:{
                 addUser(newUSerName)
                 dismiss()
+            }){
+                Text("追加")
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(12)
             }
+            Spacer()
         }
     }
     func addUser(_ name: String) {
@@ -454,5 +547,5 @@ struct AddUserView: View {
 
 
 #Preview {
-    EditUserView(user: User(), userData: UserData(id: "111", name: "ユーザー変更", createdAt: Date(), updatedAt: Date()))
+    EditUserView(user: User())
 }

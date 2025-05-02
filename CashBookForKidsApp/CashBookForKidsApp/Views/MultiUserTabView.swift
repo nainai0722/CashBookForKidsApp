@@ -40,7 +40,7 @@ struct MultiUserTabView: View {
                 }
             }
             // ボタンを設置した・・・
-            ScreenStraight2()
+//            ScreenStraight2()
         }
         .onAppear {
             isShowFullScreen = users.isEmpty ? true : false

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F838AE022DC36D1500602525 /* Package.resolved in Resources */ = {isa = PBXBuildFile; fileRef = F838AE012DC36D1500602525 /* Package.resolved */; };
 		F8D23ACC2DA8D3B800C4A7FE /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F8D23ACB2DA8D3B800C4A7FE /* RealmSwift */; };
 		F8E28D002DAA8B6F008D2549 /* RealmSwift in Embed Frameworks */ = {isa = PBXBuildFile; productRef = F8D23ACB2DA8D3B800C4A7FE /* RealmSwift */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		F8EF10792DABE398009DF0DC /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = F8EF10782DABE398009DF0DC /* FirebaseAnalytics */; };
@@ -30,12 +31,26 @@
 
 /* Begin PBXFileReference section */
 		F81A6B072D9EC86800EA87AB /* CashBookForKidsApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CashBookForKidsApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F838AE012DC36D1500602525 /* Package.resolved */ = {isa = PBXFileReference; lastKnownFileType = text; path = Package.resolved; sourceTree = "<group>"; };
 		F8EF107C2DABE694009DF0DC /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		F8E66FD12DC4594200FA4EB2 /* Exceptions for "CashBookForKidsApp" folder in "CashBookForKidsApp" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = F81A6B062D9EC86800EA87AB /* CashBookForKidsApp */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		F81A6B092D9EC86800EA87AB /* CashBookForKidsApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				F8E66FD12DC4594200FA4EB2 /* Exceptions for "CashBookForKidsApp" folder in "CashBookForKidsApp" target */,
+			);
 			path = CashBookForKidsApp;
 			sourceTree = "<group>";
 		};
@@ -58,6 +73,7 @@
 		F81A6AFE2D9EC86800EA87AB = {
 			isa = PBXGroup;
 			children = (
+				F838AE012DC36D1500602525 /* Package.resolved */,
 				F8EF107C2DABE694009DF0DC /* GoogleService-Info.plist */,
 				F81A6B092D9EC86800EA87AB /* CashBookForKidsApp */,
 				F81A6B082D9EC86800EA87AB /* Products */,
@@ -145,6 +161,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F838AE022DC36D1500602525 /* Package.resolved in Resources */,
 				F8EF107D2DABE694009DF0DC /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -292,7 +309,9 @@
 				DEVELOPMENT_TEAM = 58J628MLWX;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CashBookForKidsApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "おこづかい";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -323,7 +342,9 @@
 				DEVELOPMENT_TEAM = 58J628MLWX;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CashBookForKidsApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "おこづかい";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

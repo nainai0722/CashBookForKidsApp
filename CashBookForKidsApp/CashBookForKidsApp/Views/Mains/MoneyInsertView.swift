@@ -111,7 +111,7 @@ struct MoneyInsertView: View {
                     .font(.system(size: 18, weight: .bold))
                     .padding(.leading, 10)
                 
-                InputMemoView(inputMemo: $inputMemo)
+                InputTextView(inputMemo: $inputMemo, placeholder: "メモを入力")
                     .padding(.leading, 10)
                 
                 
