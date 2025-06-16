@@ -14,8 +14,9 @@ import FirebaseAnalytics
 }
 
 #Preview("Loading") {
-    SelectIncomeMoneyButtonListView(inputPrice: .constant("100"))
-    InputPriceView(inputPrice: .constant(""))
+    SelectIncomeMoneyButtonListView_jp(inputPrice: .constant("100"))
+    SelectIncomeMoneyButtonListView_en(inputPrice: .constant("1"))
+    InputPriceView_jp(inputPrice: .constant(""))
 }
 
 struct MoneyInsertView: View {
@@ -37,6 +38,8 @@ struct MoneyInsertView: View {
     @State var isShowHelp: Bool = false
     
     @State var isAlert: Bool = false
+    
+    @State var isMissedRequiredField: Bool = false
     
     var body: some View {
         ZStack {
@@ -64,7 +67,7 @@ struct MoneyInsertView: View {
                 .opacity(editMoney == nil ? 1 : 0)
                 .disabled(editMoney != nil)
                 
-                Text("日付")
+                Text("date".localized)
                     .font(.system(size: 18, weight: .bold))
                     .padding(.leading, 10)
                 HStack {
@@ -74,7 +77,7 @@ struct MoneyInsertView: View {
                         isShowCalendar.toggle()
                     }){
                         VStack {
-                            Text("変更する")
+                            Text("change_it".localized)
                                 .modifier(CustomColorFontSizeButton(fontSize: 15, color: .blue))
                             
                         }
@@ -85,21 +88,50 @@ struct MoneyInsertView: View {
                 Divider()
                     .frame(width: UIScreen.main.bounds.width * 0.9, height: 1)
                 
-                Text("金額")
-                    .font(.system(size: 18, weight: .bold))
-                    .padding(.leading, 10)
+                HStack {
+                    Text("price".localized)
+                        .font(.system(size: 18, weight: .bold))
+                        .padding(.leading, 10)
+                        .onAppear(){
+                            if Int(inputPrice) == nil {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                    UIApplication.shared.windows.first?.makeKeyAndVisible()
+                                }
+                            } else {
+                                isMissedRequiredField = false
+                            }
+                        }
+                    if Int(inputPrice) == nil {
+                        Text("input_price".localized)
+                            .opacity( isMissedRequiredField ? 1 : 0)
+                            .foregroundStyle(.red)
+                    }
+                }
                 
-                InputPriceView(inputPrice: $inputPrice)
+                if Locale.current.language.languageCode?.identifier == "ja" {
+                    InputPriceView_jp(inputPrice: $inputPrice)
+                    SelectIncomeMoneyButtonListView_jp(inputPrice: $inputPrice)
+                        .padding(.leading, 10)
+                } else {
+                    InputPriceView_en(inputPrice: $inputPrice)
+                    SelectIncomeMoneyButtonListView_en(inputPrice: $inputPrice)
+                        .padding(.leading, 10)
+                }
                 
-                SelectIncomeMoneyButtonListView(inputPrice: $inputPrice)
-                    .padding(.leading, 10)
                 Divider()
                     .frame(width: UIScreen.main.bounds.width * 0.9, height: 1)
                     .padding(.leading, 10)
                 
-                Text("カテゴリー")
-                    .font(.system(size: 18, weight: .bold))
-                    .padding(.leading, 10)
+                HStack {
+                    Text("category".localized)
+                        .font(.system(size: 18, weight: .bold))
+                        .padding(.leading, 10)
+                    if selectedIncomeType == nil && selectedExpenseType == nil {
+                        Text("input_category".localized)
+                            .opacity(isMissedRequiredField ? 1 : 0)
+                            .foregroundStyle(.red)
+                    }
+                }
                 CategoryButtonList(moneyType: moneyType, selectedIncomeType: $selectedIncomeType, selectedExpenseType: $selectedExpenseType)
                     .padding(.leading, 10)
                 
@@ -107,17 +139,17 @@ struct MoneyInsertView: View {
                     .frame(width: UIScreen.main.bounds.width * 0.9, height: 1)
                     .padding(.leading, 10)
                 
-                Text("メモ")
+                Text("memo".localized)
                     .font(.system(size: 18, weight: .bold))
                     .padding(.leading, 10)
                 
-                InputTextView(inputMemo: $inputMemo, placeholder: "メモを入力")
+                InputTextView(inputMemo: $inputMemo, placeholder: "input_memo".localized)
                     .padding(.leading, 10)
                 
                 
                 Spacer()
                 Button(action: {
-                    if selectedIncomeType == nil && selectedExpenseType == nil && Int(inputPrice) == nil {
+                    if selectedIncomeType == nil && selectedExpenseType == nil ||  Int(inputPrice) == nil  {
                         isAlert.toggle()
                         return
                     }
@@ -129,8 +161,7 @@ struct MoneyInsertView: View {
                     }
                     isShowFullScreen = false
                 }){
-//                    Text("保存する")
-                    Text((editMoney != nil) ? "書き換える" : "追加する")
+                    Text((editMoney != nil) ? "rewrite".localized : "add_entry".localized)
                         .modifier(CustomButtonWithColorFont(textColor: .white, backGroundColor: .blue, fontSize: 20))
                 }
             }
@@ -142,6 +173,18 @@ struct MoneyInsertView: View {
             .overlay(){
                 selectDateView(selectedDate: $selectedDate, isShowCalendar: $isShowCalendar)
             }
+            .alert(isPresented: $isAlert, content: {
+                Alert(
+                    title: Text("missing_input".localized),
+                    message: Text(missedRequiredFieldString()),
+                    dismissButton: .default(
+                        Text("OK"),
+                        action: {
+                            isMissedRequiredField = true
+                        }
+                    )
+                )
+            })
             .onAppear(){
                 if let editMoney = editMoney {
                     inputPrice = String(editMoney.price)
@@ -154,6 +197,16 @@ struct MoneyInsertView: View {
                 }
             }
         }
+    }
+    
+    func missedRequiredFieldString() -> String {
+        if selectedIncomeType == nil && selectedExpenseType == nil {
+            return "input_category".localized
+        }
+        if  Int(inputPrice) == nil {
+            return "input_price".localized
+        }
+        return "no_miss_input".localized
     }
     
     func insertMoneyItem() {
@@ -307,17 +360,17 @@ struct MoneyInsertView: View {
 }
 
 
-struct InputPriceView: View {
+struct InputPriceView_jp: View {
     @Binding var inputPrice: String
     var body: some View {
         VStack {
-            HStack(spacing:0) {
-                TextField("金額を入力", text: $inputPrice)
+            HStack(alignment: .firstTextBaseline, spacing:0) {
+                TextField("enter_amount".localized, text: $inputPrice)
                     .keyboardType(.numberPad)
                     .multilineTextAlignment(.trailing) // テキスト入力も左寄せ
                     .font(.system(size: 30))
                     .padding(.trailing, 20)
-                Text("円")
+                Text("yen".localized)
                 Button(action: {
                         inputPrice = ""
                 }){
@@ -336,9 +389,54 @@ struct InputPriceView: View {
         .padding()
     }
 }
+struct InputPriceView_en: View {
+    @Binding var inputPrice: String
+    var body: some View {
+        VStack {
+            HStack(alignment: .firstTextBaseline, spacing:0) {
+                Spacer()
+                Text("$")
+                    .font(.system(size: 30))
+                    .padding(.trailing, 0)
+                    .opacity(inputPrice.count == 0 ? 0 : 1)
+                
+                TextField("enter_amount".localized, text: $inputPrice)
+                    .keyboardType(.numberPad)
+                    .multilineTextAlignment(.trailing) // テキスト入力も左寄せ
+                    .frame(width: textWidth(text: inputPrice, font: .systemFont(ofSize: 30)))
+                    .font(.system(size: 30))
+                    .padding(.trailing, 20)
+                
+                Button(action: {
+                        inputPrice = ""
+                }){
+                    Image(systemName: "xmark.circle.fill")
+                        .padding(.leading, 10)
+                        .foregroundStyle(.gray)
+                }
+                .opacity(inputPrice.isEmpty ? 0 : 1)
+            }
+            .padding(.horizontal)
+            Rectangle()
+                .frame(height: 1)
+                .foregroundStyle(inputPrice.isEmpty ? Color.gray : Color.blue)
+                .padding(.horizontal)
+        }
+        .padding()
+    }
+    
+    func textWidth(text: String, font: UIFont) -> CGFloat {
+        let attributes = [NSAttributedString.Key.font: font]
+        let size = (text as NSString).size(withAttributes: attributes)
+        if text.count == 0 {
+            return 200
+        }
+        return max(size.width + 10, 40) // 最小幅を確保
+    }
+}
 
 
-struct SelectIncomeMoneyButtonListView: View {
+struct SelectIncomeMoneyButtonListView_jp: View {
     @Binding var inputPrice: String
     let moneyBottonContents : [Int] = [100,200,400,300,500,700,1000]
     var body: some View {
@@ -350,7 +448,29 @@ struct SelectIncomeMoneyButtonListView: View {
                             inputPrice = String(inputPriceInt + content)
                         }
                     } ) {
-                        Text("+\(content)円")
+                        Text("+%lld円".localized(with: content))
+                            .modifier(BorderedTextModifier())
+                    }
+                }
+            }
+        }
+    }
+}
+
+struct SelectIncomeMoneyButtonListView_en: View {
+    @Binding var inputPrice: String
+//    let moneyBottonContents : [Double] = [0.25,0.5,1,2,5,10]
+    let moneyBottonContents : [Int] = [1,2,3,4,5,10]
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 10) {
+                ForEach(moneyBottonContents, id: \.self) { content in
+                    Button(action: {
+                        if let inputPriceInt = Int(inputPrice.isEmpty ? "0" : inputPrice) {
+                            inputPrice = String(inputPriceInt + content)
+                        }
+                    } ) {
+                        Text("$\(content)")
                             .modifier(BorderedTextModifier())
                     }
                 }
@@ -373,7 +493,7 @@ struct CategoryButtonList:View {
                                 Button(action: {
                                     selectedIncomeType = incomeType
                                 } ) {
-                                    Text(incomeType.rawValue)
+                                    Text(incomeType.localizedName)
                                         .foregroundColor(incomeType == selectedIncomeType ? .white :.blue)
                                         .modifier(BorderedTextChangeColor(isSelected: incomeType == selectedIncomeType))
                                 }
@@ -388,7 +508,7 @@ struct CategoryButtonList:View {
                             Button(action: {
                                 selectedExpenseType = expenseType
                             } ) {
-                                Text(expenseType.rawValue)
+                                Text(expenseType.localizedName)
                                     .foregroundColor(expenseType == selectedExpenseType ? .white :.blue)
                                     .modifier(BorderedTextChangeColor(isSelected: expenseType == selectedExpenseType))
                             }
@@ -418,7 +538,7 @@ struct InsertHelp: View {
                 }
                 .padding(.leading, 30)
                 Spacer()
-                Text("使い方")
+                Text("how_to_use".localized)
                     .font(.system(size: 24))
                 Spacer()
                 Image(systemName: "xmark.circle")
@@ -449,7 +569,7 @@ struct InsertTitle: View {
             
             
             Spacer()
-            Text("お金の記録をつける")
+            Text("record_spending".localized)
                 .font(.system(size: 24))
             Spacer()
             

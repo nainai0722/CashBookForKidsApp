@@ -23,8 +23,14 @@ struct MoneyInfoCell: View {
             }
             Spacer()
             
-            Text("\(money.moneyType == .income ? "+" : "-") \(money.price)円")
-                .font(.system(size: 30))
+            if Locale.current.language.languageCode?.identifier == "ja" {
+                Text("\(money.moneyType == .income ? "+" : "-") \(money.price)円")
+                    .font(.system(size: 30))
+            } else {
+                Text("\(money.moneyType == .income ? "+" : "-") $\(money.price)")
+                    .font(.system(size: 30))
+            }
+            
         }
         .padding(.horizontal, 20)
     }
@@ -33,11 +39,11 @@ struct MoneyInfoCell: View {
         var moneyContent : String = ""
         if (money.moneyType == .income) {
             if let incomeType = money.incomeType {
-                moneyContent = incomeType.rawValue
+                moneyContent = incomeType.localizedName
             }
         } else {
             if let expenseType = money.expenseType {
-                moneyContent = expenseType.rawValue
+                moneyContent = expenseType.localizedName
             }
         }
         return moneyContent

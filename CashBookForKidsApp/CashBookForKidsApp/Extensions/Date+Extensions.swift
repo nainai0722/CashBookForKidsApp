@@ -46,6 +46,18 @@ extension Date {
     }
 }
 
+extension String {
+    var localized: String {
+        NSLocalizedString(self, comment: "")
+    }
+}
+
+extension String {
+    func localized(with arguments: CVarArg...) -> String {
+        let format = NSLocalizedString(self, comment: "")
+        return String(format: format, arguments: arguments)
+    }
+}
 
 #Preview {
     Date_Extensions()

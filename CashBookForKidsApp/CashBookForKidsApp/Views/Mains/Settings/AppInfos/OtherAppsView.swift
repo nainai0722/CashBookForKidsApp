@@ -26,7 +26,7 @@ struct OtherAppsView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                Text("この開発者の他のアプリ")
+                Text("other_apps".localized)
                     .font(.title2)
                     .bold()
                     .padding(.top)
@@ -60,7 +60,7 @@ struct AppCardView: View {
                 }
             }
 
-            Link("App Storeで見る", destination: URL(string: app.urlString)!)
+            Link("check_app_Store".localized, destination: URL(string: app.urlString)!)
                 .font(.callout)
                 .foregroundColor(.blue)
                 .padding(.top, 4)

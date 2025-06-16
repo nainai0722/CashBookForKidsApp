@@ -30,15 +30,20 @@ struct TaraRevaCalculateView: View {
             VStack{
                 InputTitleView2(isShowingSheet: $isShowingSheet, moneyType: $moneyType)
                 Divider()
-                Text(moneyType == .income ? "毎日続けたらいくらお金が貯まるだろうか？" : "毎日続けたらいくらお金が減るだろうか？")
-                Text(moneyType == .income ? "もらったお金のしゅるい" : "何に使う？")
+                Text(moneyType == .income ? "how_much_save_if_daily".localized : "how_much_reduce_if_daily".localized)
+                Text(moneyType == .income ? "received_money_type".localized : "what_will_you_use".localized)
                 MoneyTypeButtonsView(
                     moneyType: $moneyType,
                     selectedIncomeType: $selectedIncomeType,
                     selectedExpenseType: $selectedExpenseType
                 )
-                Text(moneyType == .income ? "魔日いくら使う？" : "毎日いくら使う？")
-                SelectMoneyButtonListView(inputPrice: $inputPrice)
+                Text(moneyType == .income ? "ma_nichi_ikura_tsukau".localized : "how_much_spend_daily".localized)
+//                SelectMoneyButtonListView(inputPrice: $inputPrice)
+                if Locale.current.language.languageCode?.identifier == "ja" {
+                    SelectMoneyButtonListView_jp(inputPrice: $inputPrice)
+                } else {
+                    SelectMoneyButtonListView_en(inputPrice: $inputPrice)
+                }
                     
                 VStack(spacing: 0){
                     Text("")
@@ -49,40 +54,40 @@ struct TaraRevaCalculateView: View {
                 
                 ScrollView {
                     if let price = Int(inputPrice) {
-                        Text("3日続けたら・・・")
+                        Text("continue_3_days".localized)
                         HStack {
                             PriceView(price: price, days: 3)
                             Button(action:{
                                 setSavingPlan(price, 3)
                             }){
-                                Text("目標にする")
+                                Text("set_as_goal".localized)
                             }
                         }
-                        Text("10日続けたら・・・")
+                        Text("continue_10_days".localized)
                         HStack {
                             PriceView(price: price, days: 10)
                             Button(action:{
                                 setSavingPlan(price, 10)
                             }){
-                                Text("目標にする")
+                                Text("set_as_goal".localized)
                             }
                         }
-                        Text("20日続けたら・・・")
+                        Text("continue_20_days".localized)
                         HStack {
                             PriceView(price: price, days: 20)
                             Button(action:{
                                 setSavingPlan(price, 20)
                             }){
-                                Text("目標にする")
+                                Text("set_as_goal".localized)
                             }
                         }
-                        Text("30日続けたら・・・")
+                        Text("continue_30_days".localized)
                         HStack {
                             PriceView(price: price, days: 30)
                             Button(action:{
                                 setSavingPlan(price, 30)
                             }){
-                                Text("目標にする")
+                                Text("set_as_goal".localized)
                             }
                         }
                     }
@@ -238,7 +243,7 @@ struct InputTitleView2: View {
 
             
             Spacer()
-            Text("計算する")
+            Text("calculate".localized)
                 .font(.title)
                 .padding()
             Spacer()
@@ -266,7 +271,7 @@ struct MoneyTypeButtonsView: View {
                             
                             selectedIncomeType = incomeType
                         } ) {
-                            Text(incomeType.rawValue)
+                            Text(incomeType.localizedName)
                                 .foregroundColor(incomeType == selectedIncomeType ? .white :.blue)
                                 .modifier(BorderedTextChangeColor(isSelected: incomeType == selectedIncomeType))
                         }
@@ -280,7 +285,7 @@ struct MoneyTypeButtonsView: View {
                         Button(action: {
                             selectedExpenseType = expenseType
                         } ) {
-                            Text(expenseType.rawValue)
+                            Text(expenseType.localizedName)
                                 .foregroundColor(expenseType == selectedExpenseType ? .white :.blue)
                                 .modifier(BorderedTextChangeColor(isSelected: expenseType == selectedExpenseType))
                         }

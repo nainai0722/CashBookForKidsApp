@@ -12,28 +12,34 @@ import FloatingButton
 struct SettingView: View {
     var body: some View {
         NavigationStack {
-//            Text("ユーザー情報を変更する")
-            
+            HStack {
+                Text("setting_view".localized)
+                    .font(.headline)
+            }
+            .padding(.horizontal)
+            Divider()
             ZStack(alignment: .bottomTrailing) {
+                
                 List {
                     NavigationLink {
                         UserListView()
                     } label: {
                         Image(systemName: "person.circle.fill")
                             .foregroundStyle(.green)
-                        Text("ユーザー一覧を見る")
+                        Text("view_user_list".localized)
                     }
                     NavigationLink {
-                        AppInfoView(title: "アプリ情報")
+                        AppInfoView(title: "view_app_info".localized)
                     } label: {
                         Image(systemName: "info.circle.fill")
                             .foregroundStyle(.yellow)
-                        Text("アプリ情報を見る")
+                        Text("view_app_info".localized)
                     }
                 }
                 .listStyle(.plain)
             }
         }
+        .navigationTitle("設定画面")
     }
 }
 
@@ -72,7 +78,7 @@ struct UserListView: View {
                             .foregroundColor(.blue)
                             .font(.system(size: 60))
         
-                        Text("ユーザー追加")
+                        Text("add_user".localized)
                             
                     }.padding(.bottom, 40)
                         .padding(.trailing, 40)
@@ -86,7 +92,7 @@ struct UserListView: View {
                     )
             
         }
-        .navigationTitle("ユーザー情報を変更する")
+        .navigationTitle("change_user_info".localized)
     }
     
     func castUserData(_ user: User) -> UserData {
@@ -408,7 +414,7 @@ struct EditUserView: View {
     @State private var showAlert = false
     var body: some View {
         VStack(spacing: 24) {
-            Text("ユーザー情報の編集")
+            Text("edit_user_info".localized)
                 .font(.title2)
                 .bold()
                 .padding(.top)
@@ -422,7 +428,7 @@ struct EditUserView: View {
                 updateUser(user)
                 dismiss()
             }) {
-                Text("更新")
+                Text("update".localized)
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(Color.blue)
@@ -434,14 +440,14 @@ struct EditUserView: View {
             Button(role: .destructive) {
                 showAlert = true
             } label: {
-                Text("ユーザーを削除")
+                Text("delete_user".localized)
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(Color.red.opacity(0.1))
                     .foregroundColor(.red)
                     .cornerRadius(12)
             }
-            .alert("ユーザーを削除しますか？", isPresented: $showAlert) {
+            .alert("confirm_delete_user".localized, isPresented: $showAlert) {
                 Button("削除", role: .destructive) {
                     deleteUser(user)
                     dismiss()
@@ -486,7 +492,7 @@ struct AddUserView: View {
     @State var newUSerName: String = ""
     var body: some View {
         VStack(spacing: 24)  {
-            Text("新規ユーザー")
+            Text("new_user".localized)
                 .font(.title2)
                 .bold()
                 .padding(.top)
@@ -496,14 +502,14 @@ struct AddUserView: View {
 //                .multilineTextAlignment(.trailing)
             
             // 名前入力フィールド（InputMemoView風の見た目）
-            InputTextView(inputMemo: $newUSerName,placeholder: "名前を入力")
+            InputTextView(inputMemo: $newUSerName,placeholder: "input_name".localized)
                 .padding(.horizontal)
             
             Button(action:{
                 addUser(newUSerName)
                 dismiss()
             }){
-                Text("追加")
+                Text("add_user".localized)
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(Color.blue)

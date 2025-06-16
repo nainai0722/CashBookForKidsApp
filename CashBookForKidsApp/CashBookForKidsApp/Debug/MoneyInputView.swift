@@ -38,7 +38,7 @@ struct MoneyInputView: View {
             VStack{
                 InputTitleView(isShowingSheet: $isShowingSheet, moneyType: $moneyType, selectedIncomeType: $selectedIncomeType, selectedExpenseType: $selectedExpenseType,editMoney: $editMoney)
                 Divider()
-                Text(moneyType == .income ? "もらったお金のしゅるい" : "何につかった？")
+                Text(moneyType == .income ? "received_money_type".localized : "what_did_you_spend".localized)
                 
                 if moneyType == .income {
                     
@@ -49,7 +49,7 @@ struct MoneyInputView: View {
                                     
                                     selectedIncomeType = incomeType
                                 } ) {
-                                    Text(incomeType.rawValue)
+                                    Text(incomeType.localizedName)
                                         .foregroundColor(incomeType == selectedIncomeType ? .white :.blue)
                                         .modifier(BorderedTextChangeColor(isSelected: incomeType == selectedIncomeType))
                                 }
@@ -63,7 +63,7 @@ struct MoneyInputView: View {
                                 Button(action: {
                                     selectedExpenseType = expenseType
                                 } ) {
-                                    Text(expenseType.rawValue)
+                                    Text(expenseType.localizedName)
                                         .foregroundColor(expenseType == selectedExpenseType ? .white :.blue)
                                         .modifier(BorderedTextChangeColor(isSelected: expenseType == selectedExpenseType))
                                 }
@@ -72,8 +72,14 @@ struct MoneyInputView: View {
                     }
                 }
                 
-                InputPriceView(inputPrice: $inputPrice)
-                SelectMoneyButtonListView(inputPrice: $inputPrice)
+                InputPriceView_jp(inputPrice: $inputPrice)
+                
+                if Locale.current.language.languageCode?.identifier == "ja" {
+                    SelectMoneyButtonListView_jp(inputPrice: $inputPrice)
+                } else {
+                    SelectMoneyButtonListView_en(inputPrice: $inputPrice)
+                }
+                
                     
                 VStack(spacing: 0){
                     Text("")
@@ -95,13 +101,13 @@ struct MoneyInputView: View {
                     }
                     isShowingSheet = false
                 }){
-                    Text((editMoney != nil) ? "書き換える" : "追加する")
+                    Text((editMoney != nil) ? "rewrite".localized : "add_entry".localized)
                         .modifier(CustomButtonLayoutWithSetColor(textColor: .white, backGroundColor: .blue, fontType: .title))
                 }
                 .alert(isPresented: $isAlert) {
-                    Alert(title: Text("エラー"),
-                                     message: Text("更新するお小遣いまたは支出の種類を指定してください。"),
-                                     dismissButton: .default(Text("閉じる")))
+                    Alert(title: Text("error".localized),
+                          message: Text("please_specify_type_to_update".localized),
+                          dismissButton: .default(Text("close".localized)))
                 }
                 
                 InputTextView(inputMemo: $inputMemo, placeholder: "メモを入力")
@@ -110,7 +116,7 @@ struct MoneyInputView: View {
                     isShowCalendar.toggle()
                 }){
                     VStack {
-                        Text("登録する日付は\(selectedDate.formattedYearMonthDayString)")
+                        Text("register_date_is".localized(with: selectedDate.formattedYearMonthDayString))
                         
                     }
                     .modifier(CustomButtonLayoutWithSetColor(textColor: .white, backGroundColor: .blue, fontType: .headline))
@@ -297,7 +303,7 @@ struct selectDateView: View {
     var body: some View {
         ZStack {
             VStack {
-                Text("変更する日付を選ぶ")
+                Text("select_change_date".localized)
                 DatePicker(
                     "\(selectedDate.formattedYearMonthDayString)",
                     selection: $selectedDate,
@@ -307,7 +313,7 @@ struct selectDateView: View {
                 Button(action:{
                     isShowCalendar = false
                 }){
-                    Text("閉じる")
+                    Text("close".localized)
                 }
             }
             .frame(width: 300, height: 400)
@@ -354,7 +360,7 @@ struct InputTextView: View {
     }
 }
 
-struct SelectMoneyButtonListView: View {
+struct SelectMoneyButtonListView_jp: View {
     @Binding var inputPrice: String
     let moneyBottonContents : [Int] = [100,200,400,300,500,700,1000]
     var body: some View {
@@ -371,6 +377,30 @@ struct SelectMoneyButtonListView: View {
             }
         }
     }
+}
+
+struct SelectMoneyButtonListView_en: View {
+    @Binding var inputPrice: String
+    let moneyBottonContents : [Int] = [1,2,3,4,5,7,10]
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 10) {
+                ForEach(moneyBottonContents, id: \.self) { content in
+                    Button(action: {
+                        inputPrice = String(content)
+                    } ) {
+                        Text("$\(content)")
+                            .modifier(BorderedTextModifier())
+                    }
+                }
+            }
+        }
+    }
+}
+
+#Preview("SelectMoneyButtonListView") {
+    SelectMoneyButtonListView_jp(inputPrice: .constant("100"))
+    SelectMoneyButtonListView_en(inputPrice: .constant("1"))
 }
 
 struct InputTitleView: View {
@@ -398,7 +428,7 @@ struct InputTitleView: View {
 
             
             Spacer()
-            Text("記録する")
+            Text("record".localized)
                 .font(.title)
                 .padding()
             Spacer()

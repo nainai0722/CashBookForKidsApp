@@ -50,7 +50,7 @@ struct MoneyChartView: View {
             let total = user.moneys
                 .where { $0.incomeType == income && $0.moneyType == .income }
                 .sum(of: \.price)
-            incomeTypeTotals[income?.rawValue ?? ""] = total
+            incomeTypeTotals[income?.localizedName ?? ""] = total
         }
     }
     
@@ -61,7 +61,7 @@ struct MoneyChartView: View {
             let total = user.moneys
                 .where { $0.expenseType == expense && $0.moneyType == .expense }
                 .sum(of: \.price)
-            expenseTypeTotals[expense?.rawValue ?? ""] = total
+            expenseTypeTotals[expense?.localizedName ?? ""] = total
         }
     }
     
@@ -72,9 +72,9 @@ struct MoneyChartView: View {
                     .cornerRadius(20)
                     .padding()
                 VStack() {
-                    Text("もらったお金の内訳")
+                    Text("received_money_breakdown".localized)
                     if existIncomeData() == false {
-                        Text("収入はありません")
+                        Text("no_income".localized)
                     } else {
                         IncomePieChartView(data: getIncomePieData())
                     }
@@ -86,9 +86,9 @@ struct MoneyChartView: View {
                     .cornerRadius(20)
                     .padding()
                 VStack {
-                    Text("つかったお金の内訳")
+                    Text("expense_breakdown".localized)
                     if existExpenseData() == false{
-                        Text("支出はありません")
+                        Text("no_income".localized)
                     } else {
                         IncomePieChartView(data: getExpensePieData())
                     }
@@ -172,8 +172,8 @@ struct MoneyChartView: View {
             .sum(of: \.price)
         incomeCount = user.moneys
             .where { $0.moneyType == .income && $0.incomeType == incomeType }.count
-        print("\(incomeType.rawValue)の金額: \(incomeAmount)")
-        print("\(incomeType.rawValue)の回数: \(incomeCount)")
+        print("\(incomeType.localizedName)の金額: \(incomeAmount)")
+        print("\(incomeType.localizedName)の回数: \(incomeCount)")
     }
     
     private func fetchExpenseTypeData(expenseType:ExpenseType, expenseAmount: inout Int, expenseCount: inout Int) {
@@ -183,8 +183,8 @@ struct MoneyChartView: View {
             .sum(of: \.price)
         expenseCount = user.moneys
             .where { $0.moneyType == .expense && $0.expenseType == expenseType }.count
-        print("\(expenseType.rawValue)の金額: \(expenseAmount)")
-        print("\(expenseType.rawValue)の回数: \(expenseCount)")
+        print("\(expenseType.localizedName)の金額: \(expenseAmount)")
+        print("\(expenseType.localizedName)の回数: \(expenseCount)")
     }
 }
 

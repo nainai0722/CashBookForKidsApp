@@ -32,16 +32,14 @@ struct AppInfoView: View {
     }
     
     let settings: [MainTitle] = [
-        MainTitle(name: "アプリ情報", details:
-                 [DetailTitle(name: "SDK一覧", view: AnyView(SDKListView())),
-                  DetailTitle(name: "お問い合わせ", view: AnyView(
+        MainTitle(name: "app_info".localized, details:
+                    [DetailTitle(name: "sdk_list".localized, view: AnyView(SDKListView())),
+                     DetailTitle(name: "help_center".localized, view: AnyView(
                     InquiryView()
                   )),
-                  DetailTitle(name: "その他アプリ", view: AnyView(OtherAppsView())),
-                  DetailTitle(name: "プライバシーポリシー", view: AnyView(PrivacyView()))
+                     DetailTitle(name: "other_app".localized, view: AnyView(OtherAppsView())),
+                     DetailTitle(name: "privacy_policy".localized, view: AnyView(PrivacyView()))
                  ]),
-        
-//        MainTitle(name: "設定1", details: [DetailTitle(name: "ダーク・ライト切り替え", view: AnyView(HogeView())),DetailTitle(name: "アイコン変更", view: AnyView(SDKListView())), DetailTitle(name: "言語設定", view: AnyView(SDKListView()))])
     ]
     @State private var singleSelection: UUID?
     let title: String
@@ -63,6 +61,7 @@ struct AppInfoView: View {
             }
             .listStyle(.plain)
         }
+        .navigationTitle("change_user_info".localized)
     }
 }
 
@@ -74,15 +73,15 @@ struct HogeView:View {
     @AppStorage("colorSchemeMode") private var colorSchemeMode: String = "system" // "light" / "dark" / "system"
     var body: some View {
         List {
-            Text("特に設定しない")
+            Text("no_goal_setting".localized)
                 .onTapGesture {
                     colorSchemeMode = "system"
                 }
-            Text("ダーク")
+            Text("dark_mode".localized)
                 .onTapGesture {
                     colorSchemeMode = "dark"
                 }
-            Text("ライト")
+            Text("light".localized)
                 .onTapGesture {
                     colorSchemeMode = "light"
                 }

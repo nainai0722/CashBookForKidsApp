@@ -17,10 +17,10 @@ struct MoneyListView: View {
     var body: some View {
         Text(taroUsers.first?.name ?? "")
         HStack {
-            Button("ふやす") {
+            Button("add".localized) {
                 updateUser(User())
             }
-            Button("へらす") {
+            Button("remove".localized) {
                 updateUser(User())
             }
         }

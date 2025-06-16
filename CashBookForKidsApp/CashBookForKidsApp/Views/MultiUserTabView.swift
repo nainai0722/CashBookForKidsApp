@@ -32,7 +32,7 @@ struct MultiUserTabView: View {
                     }
                     SettingView()
                         .tabItem {
-                            Text("設定")
+                            Text("settings".localized)
                         }
                 }
                 .fullScreenCover(isPresented: $isShowFullScreen) {
@@ -159,7 +159,7 @@ struct ButtonView: View {
                 editMoney = nil
                 isShowingIncomeSheet.toggle()
             }){
-                Text("ふやす")
+                Text("add".localized)
                     .modifier(CustomGreenButton(fontType: .headline))
             }
             .offset(x: showTitle ? 0 : -UIScreen.main.bounds.width)
@@ -172,7 +172,7 @@ struct ButtonView: View {
                 editMoney = nil
                 isShowingExpenseSheet.toggle()
             }){
-                Text("へらす")
+                Text("remove".localized)
                     .modifier(CustomGreenButton(fontType: .headline))
             }
             .offset(y: showTitle ? 0 : -UIScreen.main.bounds.height)
@@ -185,7 +185,7 @@ struct ButtonView: View {
                 editMoney = nil
                 isShowingTaraRevaCalculateSheet.toggle()
             }){
-                Text("たられば計算")
+                Text("what_if_calculator".localized)
                     .modifier(CustomGreenButton(fontType: .headline))
             }
             .offset(x: showTitle ? 0 : UIScreen.main.bounds.width)
@@ -267,7 +267,7 @@ private struct ContextMenuMenuItems: View {
 
             HStack {
                 Image(systemName: isFavorited ? "heart.fill" : "heart")
-                Text("お気に入り")
+                Text("favorites".localized)
             }
         }
     }

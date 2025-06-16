@@ -5,6 +5,10 @@
 //  Created by 指原奈々 on 2025/03/02.
 //
 
+/*
+ 使っていない
+ */
+
 import SwiftUI
 import RealmSwift
 
@@ -139,11 +143,11 @@ struct MoneyRecordView: View {
             }
 
             let income = allMoneys
-                .filter("moneyTypeRawValue == %@", MoneyType.income.rawValue)
+                .filter("moneyTypeRawValue == %@", MoneyType.income.localizedName)
                 .sum(ofProperty: "price") as Int
             
             let expense = allMoneys
-                .filter("moneyTypeRawValue == %@", MoneyType.expense.rawValue)
+                .filter("moneyTypeRawValue == %@", MoneyType.expense.localizedName)
                 .sum(ofProperty: "price") as Int
             
             totalMoney = income - expense

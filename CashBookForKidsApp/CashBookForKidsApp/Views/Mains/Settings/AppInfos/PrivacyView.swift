@@ -42,7 +42,7 @@ struct WebViewScreen: View {
             WebView(url: url)
                 .edgesIgnoringSafeArea(.all)
         } else {
-            Text("URLが無効です")
+            Text("invalid_url".localized)
         }
     }
 }

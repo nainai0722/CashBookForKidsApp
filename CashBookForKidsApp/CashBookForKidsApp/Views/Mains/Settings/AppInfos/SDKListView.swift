@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SDKListView: View {
     @StateObject var viewModel = SDKViewModel()
-    let title: String = "SDK一覧"
+    let title: String = "sdk_list".localized
     var body: some View {
         NavigationView {
             List(viewModel.sdkList) { sdk in

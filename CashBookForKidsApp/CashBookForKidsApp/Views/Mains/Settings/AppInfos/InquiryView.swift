@@ -11,36 +11,41 @@ import MessageUI
 import UIKit
 
 struct InquiryView: View {
-    @State private var inquiryType = "アプリの改善"
+    @State private var inquiryType = "inquiry_improvement".localized
     @State private var inquiryDetail = ""
     @State private var includeDeviceInfo = false
     @State private var isShowingMailView = false
     @State private var result: Result<MFMailComposeResult, Error>? = nil
     @State private var isSendPopup: Bool = false
-    let inquiryOptions = ["アプリの改善", "不具合連絡", "意見や感想"]
-
+    
+    let inquiryOptionKeys = [
+        "inquiry_improvement",
+        "inquiry_bug_report",
+        "inquiry_feedback"
+    ]
+    
     var body: some View {
         
         Form {
-            Section(header: Text("問い合わせ種別")) {
-                Picker("種類を選択", selection: $inquiryType) {
-                    ForEach(inquiryOptions, id: \.self) { option in
-                        Text(option)
+            Section(header: Text("contact_type".localized)) {
+                Picker("select_type".localized, selection: $inquiryType) {
+                    ForEach(inquiryOptionKeys, id: \.self) { key in
+                        Text(LocalizedStringKey(key))
                     }
                 }
                 .pickerStyle(.segmented)
             }
 
-            Section(header: Text("詳細")) {
+            Section(header: Text("details".localized)) {
                 TextEditor(text: $inquiryDetail)
                     .frame(height: 150)
             }
 
             Section {
-                Toggle("端末情報を含める", isOn: $includeDeviceInfo)
+                Toggle("include_device_info".localized, isOn: $includeDeviceInfo)
             }
             
-            Button("メール送信") {
+            Button("send_mail".localized) {
                 isShowingMailView = true
                 inquiryDetail = ""
                 isSendPopup = true

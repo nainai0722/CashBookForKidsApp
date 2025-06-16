@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MailLinkView: View {
     var body: some View {
-        Link("メール送信",
+        Link("send_email".localized,
               destination: URL(string: "mailto:campsisgrandiflora0722@gmail.com")!)
     }
 }

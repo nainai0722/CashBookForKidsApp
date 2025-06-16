@@ -18,20 +18,20 @@ struct CustomLayout: View {
         Button(action: {
             
         }){
-            Text("変更")
+            Text("change".localized)
                 .modifier(CustomColorFontSizeButton(fontSize: 15, color: .blue))
         }
         
         Button(action:{}){
-            Text("ふやす")
+            Text("add".localized)
                 .modifier(CustomGreenButton(fontType: .headline))
         }
         
         
-        Text("色を変える")
+        Text("change_color".localized)
             .modifier(CustomButtonLayoutWithSetColor(textColor: Color.white,backGroundColor: Color.green,fontType: .largeTitle))
         
-        Text("Paypayっぽく")
+        Text("look_like_paypay")
             .modifier(CustomButtonWithColorFont(textColor: .white, backGroundColor: .blue, fontSize: 20))
     }
 }

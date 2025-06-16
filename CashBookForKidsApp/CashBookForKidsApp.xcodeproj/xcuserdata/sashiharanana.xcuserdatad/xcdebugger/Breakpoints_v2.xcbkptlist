@@ -94,24 +94,8 @@
             filePath = "CashBookForKidsApp/Views/Mains/MoneyInsertView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "124"
-            endingLineNumber = "124"
-            landmarkName = "body"
-            landmarkType = "24">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "EE4F47DA-4DBC-43ED-8BD1-329006BEDB30"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CashBookForKidsApp/Views/Mains/MoneyInsertView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "120"
-            endingLineNumber = "120"
+            startingLineNumber = "156"
+            endingLineNumber = "156"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -158,8 +142,8 @@
             filePath = "CashBookForKidsApp/Views/Mains/MoneyInsertView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "175"
-            endingLineNumber = "175"
+            startingLineNumber = "228"
+            endingLineNumber = "228"
             landmarkName = "insertMoneyItem()"
             landmarkType = "7">
          </BreakpointContent>
@@ -178,6 +162,212 @@
             endingLineNumber = "93"
             landmarkName = "body"
             landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5F12B29A-9FD4-456C-BABA-58BFAFA32145"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CashBookForKidsApp/Views/Mains/MoneyInputView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "66"
+            endingLineNumber = "66"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "32B48C92-C957-4D52-A810-588ACCCF43F1"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CashBookForKidsApp/Views/Mains/MoneyInputView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "52"
+            endingLineNumber = "52"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6ABD9C90-D7AA-4EC7-9293-5447B26D2016"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CashBookForKidsApp/Views/Mains/MoneyInsertView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "511"
+            endingLineNumber = "511"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5B229FB5-87E4-47FC-A488-E7CC623149C5"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CashBookForKidsApp/Views/Mains/MoneyInsertView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "496"
+            endingLineNumber = "496"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F4D340DF-B860-4F4A-A9B8-FC554BE20911"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CashBookForKidsApp/Views/Mains/TaraRevaCalculateView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "274"
+            endingLineNumber = "274"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "752CBDAA-E0D3-4CA4-A3F6-62039DF8D962"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CashBookForKidsApp/Views/Mains/TaraRevaCalculateView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "288"
+            endingLineNumber = "288"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2CA03068-C68B-4E91-829D-0F74616F4D51"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CashBookForKidsApp/Views/Mains/TaraRevaCalculateView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "35"
+            endingLineNumber = "35"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FAF3FD07-F2DD-456F-AF5B-9AED34C2D8F8"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CashBookForKidsApp/Views/Mains/MoneyInsertView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "451"
+            endingLineNumber = "451"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2B34E815-99AF-4E0A-B2B1-9C75A32F41D1"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CashBookForKidsApp/Views/Mains/MoneyInputView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "80"
+            endingLineNumber = "80"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "16D3D341-1C53-4C32-B596-2B27D078F14D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CashBookForKidsApp/Views/Mains/MoneyInsertView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "464"
+            endingLineNumber = "464"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "28736AD0-E02C-4502-AE35-C45A7705AB27"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CashBookForKidsApp/Debug/MoneyListView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "30"
+            endingLineNumber = "30"
+            landmarkName = "body"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "28736AD0-E02C-4502-AE35-C45A7705AB27 - 92fe0a6712fc7c65"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (CashBookForKidsApp.User) -&gt; SwiftUI.ForEach&lt;RealmSwift.List&lt;CashBookForKidsApp.Money&gt;, Swift.String, SwiftUI.HStack&lt;SwiftUI.TupleView&lt;(SwiftUI.Text, SwiftUI.Text, SwiftUI.Spacer, SwiftUI.Text)&gt;&gt;&gt; in closure #2 () -&gt; SwiftUI.ForEach&lt;RealmSwift.Results&lt;CashBookForKidsApp.User&gt;, Swift.String, SwiftUI.ForEach&lt;RealmSwift.List&lt;CashBookForKidsApp.Money&gt;, Swift.String, SwiftUI.HStack&lt;SwiftUI.TupleView&lt;(SwiftUI.Text, SwiftUI.Text, SwiftUI.Spacer, SwiftUI.Text)&gt;&gt;&gt;&gt; in CashBookForKidsApp.MoneyListView.body.getter : some"
+                  moduleName = "CashBookForKidsApp.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sashiharanana/Documents/iOS/Swift/CashBookForKidsApp/CashBookForKidsApp/CashBookForKidsApp/CashBookForKidsApp/Debug/MoneyListView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "30"
+                  endingLineNumber = "30">
+               </Location>
+               <Location
+                  uuid = "28736AD0-E02C-4502-AE35-C45A7705AB27 - c18ae0f4a80e8a81"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (CashBookForKidsApp.Money) -&gt; SwiftUI.HStack&lt;SwiftUI.TupleView&lt;(SwiftUI.Text, SwiftUI.Text, SwiftUI.Spacer, SwiftUI.Text)&gt;&gt; in closure #1 (CashBookForKidsApp.User) -&gt; SwiftUI.ForEach&lt;RealmSwift.List&lt;CashBookForKidsApp.Money&gt;, Swift.String, SwiftUI.HStack&lt;SwiftUI.TupleView&lt;(SwiftUI.Text, SwiftUI.Text, SwiftUI.Spacer, SwiftUI.Text)&gt;&gt;&gt; in closure #2 () -&gt; SwiftUI.ForEach&lt;RealmSwift.Results&lt;CashBookForKidsApp.User&gt;, Swift.String, SwiftUI.ForEach&lt;RealmSwift.List&lt;CashBookForKidsApp.Money&gt;, Swift.String, SwiftUI.HStack&lt;SwiftUI.TupleView&lt;(SwiftUI.Text, SwiftUI.Text, SwiftUI.Spacer, SwiftUI.Text)&gt;&gt;&gt;&gt; in CashBookForKidsApp.MoneyListView.body.getter : some"
+                  moduleName = "CashBookForKidsApp.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sashiharanana/Documents/iOS/Swift/CashBookForKidsApp/CashBookForKidsApp/CashBookForKidsApp/CashBookForKidsApp/Debug/MoneyListView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "31"
+                  endingLineNumber = "31">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

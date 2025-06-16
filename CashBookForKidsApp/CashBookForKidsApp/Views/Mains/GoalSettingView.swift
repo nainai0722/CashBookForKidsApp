@@ -35,12 +35,12 @@ struct GoalSettingView: View {
                 Rectangle().fill(Color.green)
                     .cornerRadius(20)
                 VStack {
-                    Text("目標の設定画面")
+                    Text("goal_setting_screen".localized)
                         .font(.system(size: 30))
                         .padding()
-                    Text("今の目標は\(goal.amount)")
+                    Text("current_goal".localized(with: goal.amount))
                         .padding()
-                    Text(isAchieved ? "達成しました！" : "あと\(result)円です")
+                    Text(isAchieved ? "goal_achieved".localized : "remaining_amount".localized(with: result))
                     
                     VStack {
                         if isAchieved {
@@ -50,7 +50,7 @@ struct GoalSettingView: View {
 //                                goal = nextGaolSetting()
                             })
                             {
-                                Text("次の目標を設定する")
+                                Text("set_next_goal".localized)
                                 
                             }
                         }

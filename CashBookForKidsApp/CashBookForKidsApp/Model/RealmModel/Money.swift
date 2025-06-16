@@ -48,9 +48,18 @@ class Money: Object, ObjectKeyIdentifiable {
     }
 }
 
-enum MoneyType: String, CaseIterable, Codable,PersistableEnum {
+enum MoneyType: String, CaseIterable, Codable, PersistableEnum {
     case income = "もらったお金"
     case expense = "使ったお金"
+
+    var localizedName: String {
+        switch self {
+        case .income:
+            return NSLocalizedString("money_type_income", comment: "")
+        case .expense:
+            return NSLocalizedString("money_type_expense", comment: "")
+        }
+    }
 }
 
 enum IncomeType: String, CaseIterable, Codable, PersistableEnum {
@@ -58,6 +67,16 @@ enum IncomeType: String, CaseIterable, Codable, PersistableEnum {
     case study = "勉強"
     case monthlyPayment = "毎月のおこづかい"
     case other = "その他"
+    
+    var localizedName: String {
+        switch self {
+        case .familySupport: return NSLocalizedString("income_family_support", comment: "")
+        case .study: return NSLocalizedString("income_study", comment: "")
+        case .monthlyPayment: return NSLocalizedString("income_monthly_payment", comment: "")
+        case .other: return NSLocalizedString("income_other", comment: "")
+        }
+    }
+    
 }
 
 enum ExpenseType: String, CaseIterable, Codable, PersistableEnum {
@@ -65,4 +84,13 @@ enum ExpenseType: String, CaseIterable, Codable, PersistableEnum {
     case food = "おやつ"
     case shopping = "お買い物"
     case other = "その他"
+    
+    var localizedName: String {
+        switch self {
+        case .game: return NSLocalizedString("expense_game", comment: "")
+        case .food: return NSLocalizedString("expense_food", comment: "")
+        case .shopping: return NSLocalizedString("expense_shopping", comment: "")
+        case .other: return NSLocalizedString("expense_other", comment: "")
+        }
+    }
 }

@@ -62,7 +62,7 @@ struct MoneySummaryComponent: View {
 //                    }
                 }
                 HStack {
-                    Text("おこづかい")
+                    Text("allowance".localized)
                         .font(.headline)
                         .popover(isPresented: $isShowingGoalSetting) {
                             Text(goalAchieved())
@@ -79,8 +79,16 @@ struct MoneySummaryComponent: View {
                         .foregroundStyle(.white.opacity(0.9))
                 }
                 .padding(.bottom, 20)
-                Text("\(total)円")
-                    .font(.title)
+                
+                if Locale.current.language.languageCode?.identifier == "ja" {
+                    Text(String.localizedStringWithFormat(NSLocalizedString("%lld円", comment: ""), total))
+                        .font(.title)
+                } else {
+                    Text("$\(total)")
+                        .font(.title)
+                }
+                
+                
             }
             .foregroundStyle(.white)
             .padding(.horizontal,40)
@@ -100,7 +108,7 @@ struct MoneySummaryComponent: View {
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 60, height: 60)
-                            Text("こまかく見る")
+                            Text("view_details".localized)
                         }
                         .padding([.bottom,.trailing],10)
                         .wiggle(wiggle: wiggle)
@@ -134,7 +142,12 @@ struct MoneySummaryComponent: View {
     
     func goalAchieved() -> String {
         if isGoalAchieved {
-            return "目標まであと\(amountToGoal)円"
+            if Locale.current.language.languageCode?.identifier == "ja" {
+                return "目標まであと\(amountToGoal)円"
+            } else {
+                return "\(amountToGoal) yen left to reach your goal"
+            }
+            
         } else {
             return "達成しました"
         }
